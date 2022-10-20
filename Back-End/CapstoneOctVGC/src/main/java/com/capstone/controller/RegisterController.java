@@ -1,5 +1,8 @@
 package com.capstone.controller;
 
-public class RegisterController {
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+public class RegisterController {
+	
 }
