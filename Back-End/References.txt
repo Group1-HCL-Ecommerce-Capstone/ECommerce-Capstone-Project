@@ -1,0 +1,2 @@
+Template used for project by Bezkoder
+https://www.bezkoder.com/com/spring-boot-jwt-authentication/
