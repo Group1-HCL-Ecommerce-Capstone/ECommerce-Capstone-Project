@@ -17,28 +17,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capstone.model.Product;
 import com.capstone.model.User;
-import com.capstone.service.UserService;
+import com.capstone.service.ProductService;
 
 @RestController
-@RequestMapping("/admin")
-public class UserController {	
-	
+@RequestMapping("/admin/products")
+public class ProductController {
 	@Autowired
-	UserService usrService;
+	ProductService prdService;
 	
-	public UserController(UserService usrService) {
-		this.usrService = usrService;
-	}
-	
-	@GetMapping("/allUsers")
-	public ResponseEntity<List<User>> listOfAllUsers(){
+	@GetMapping("/all")
+	public ResponseEntity<List<Product>> listOfAllProducts(){
 		try {
-			List<User> allUsers = usrService.listAllUsers();
-			if(allUsers.isEmpty()) {
+			List<Product> allProducts = prdService.listAllProducts();
+			if(allProducts.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			} else {
-				return new ResponseEntity<>(allUsers, HttpStatus.OK);
+				return new ResponseEntity<>(allProducts, HttpStatus.OK);
 			}
 		} catch(Exception e){
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -46,47 +42,47 @@ public class UserController {
 	}
 	
 	@GetMapping("/find/{id}")
-	public ResponseEntity<Optional<User>> selectUserById(@PathVariable Integer userId){
+	public ResponseEntity<Optional<Product>> selectProductById(@PathVariable String productId){
 		try {
-			Optional<User> foundUser = usrService.findUserById(userId);
-			return new ResponseEntity<>(foundUser, HttpStatus.OK);
+			Optional<Product> foundProduct = prdService.findProductById(productId);
+			return new ResponseEntity<>(foundProduct, HttpStatus.OK);
 		} catch(NoSuchElementException e){
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@PostMapping("/register")
-	public ResponseEntity<User> registerUser(@RequestBody User usr){
+	@PostMapping("/add")
+	public ResponseEntity<Product> registerProduct(@RequestBody Product prd){
 		try {
-			User registeredUser = usrService.registerUser(usr);
-			return new ResponseEntity<>(registeredUser, HttpStatus.OK);
+			Product registeredProduct = prdService.createProduct(prd);
+			return new ResponseEntity<>(registeredProduct, HttpStatus.OK);
 		} catch(Exception e){
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
 	@PutMapping("/update/{id}")
-	public ResponseEntity<User> updateUserDetails(@PathVariable Integer userId, @RequestBody User usr){
+	public ResponseEntity<Product> updateProduct(@PathVariable String productId, @RequestBody Product prd){
 		try {
-			User databaseUser = usrService.findUserById(userId).get();
-			if(Objects.nonNull(usr.getFirstName())) {
-				databaseUser.setFirstName(usr.getFirstName());
+			Product databaseProduct = prdService.findProductById(productId).get();
+			if(Objects.nonNull(prd.getProductName())) {
+				databaseProduct.setProductName(prd.getProductName());
 			}
-			if(Objects.nonNull(usr.getLastName())) {
-				databaseUser.setLastName(usr.getLastName());
+			if(Objects.nonNull(prd.getProductStock())) {
+				databaseProduct.setProductStock(prd.getProductStock());
 			}
-			// for now just allowing to change first and last name will later find out
-			// how to change password and role type in a better way
-			return new ResponseEntity<>(usrService.save(databaseUser), HttpStatus.OK);
+			// for now just allowing to change Name and Stock
+			
+			return new ResponseEntity<>(prdService.save(databaseProduct), HttpStatus.OK);
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 	
 	@DeleteMapping("/delete/{id})")
-	public ResponseEntity<HttpStatus> deleteUserById(@PathVariable Integer userId){
+	public ResponseEntity<HttpStatus> deleteProductById(@PathVariable String productId){
 		try {
-			usrService.deleteUserById(userId);
+		 prdService.deleteProductById(productId);
 			return new ResponseEntity<>(HttpStatus.ACCEPTED);
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

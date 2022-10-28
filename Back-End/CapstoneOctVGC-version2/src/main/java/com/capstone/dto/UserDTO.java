@@ -1,5 +1,16 @@
 package com.capstone.dto;
 
-public class UserDTO {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserDTO {
+	private int userId;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String password;
 }
