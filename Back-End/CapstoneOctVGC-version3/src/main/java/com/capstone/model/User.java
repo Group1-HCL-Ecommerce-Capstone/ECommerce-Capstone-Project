@@ -15,6 +15,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,7 +33,11 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userId;
 	
+	@NotBlank
+	@Email
 	private String email;
+	
+	@NotBlank
 	private String password;
 	private String firstName;
 	private String lastName;
@@ -40,6 +46,7 @@ public class User {
 	// i know there is many to many but when i do this, a roles column is missing from the 
 	// database, and i believe the reason why my put, post, delete methods are forbidden 
 	// is because of this attribute
+	//SOLVED
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "Users_To_Roles",

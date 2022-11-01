@@ -24,11 +24,10 @@ public class JwtUtils {
 	@Value("{jwt.secret}")
 	private String jwtSecret;
 	
-	@Value("{jwt.expirationMs}")
-	private int jwtExpirationMs;
+	private final int jwtExpirationMs = 86400000;
 	
-	public String generateJwtToken(Authentication auth) {
-		UserDetailsImpl userPrincipal = (UserDetailsImpl) auth.getPrincipal();
+	public String generateJwtToken(Authentication authentication) {
+		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 		return Jwts.builder()
 				.setSubject(userPrincipal.getEmail())
 				.setIssuedAt(new Date())

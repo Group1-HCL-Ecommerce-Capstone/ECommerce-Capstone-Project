@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.naming.AuthenticationException;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,11 +33,10 @@ import com.capstone.security.JwtUtils;
 import com.capstone.service.UserDetailsImpl;
 
 @RestController
-@CrossOrigin
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 	@Autowired
-	private AuthenticationManager authManager;
+	AuthenticationManager authenticationManager;
 
 	@Autowired
 	UserRepository userRepo;
@@ -52,28 +51,35 @@ public class AuthController {
 	JwtUtils jwtUtils;
 
 	@PostMapping("/login")
-	public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest login) {
-		Authentication auth = authManager
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest login) {
+		Authentication auth = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		String jwt = jwtUtils.generateJwtToken(auth);
 		UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
-		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+		List<String> roles = userDetails.getAuthorities().stream()
+				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
-		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getUserId(), userDetails.getEmail(),
-				userDetails.getFirstName(), userDetails.getLastName(), roles));
+		return ResponseEntity.ok(new JwtResponse(jwt, 
+												 userDetails.getUserId(), 
+												 userDetails.getEmail(),
+												 userDetails.getFirstName(), 
+												 userDetails.getLastName(), 
+												 roles));
 	}
 
 	@PostMapping("/register")
-	public ResponseEntity<?> registerUser(@RequestBody RegisterRequest register) {
-		if (userRepo.emailExists(register.getEmail())) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use"));
+	public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest register) {
+		if (userRepo.existsByEmail(register.getEmail())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Email is already in use"));
 		}
 
 		User user = new User(register.getEmail(), 
-				encoder.encode(register.getPassword()), 
-				register.getFirstName(), 
-				register.getLastName());
+							 encoder.encode(register.getPassword()), 
+							 register.getFirstName(), 
+							 register.getLastName());
 		Set<String> rolesString = register.getRole();
 		Set<Role> roles = new HashSet<>();
 		if(rolesString == null) {
@@ -84,12 +90,13 @@ public class AuthController {
 			rolesString.forEach(role -> {
 				switch (role) {
 				case "admin":
-					Role adminRole = roleRepo.findByRoleType(RoleEnum.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Error: Role not found"));
+					Role adminRole = roleRepo.findByRoleType(RoleEnum.ROLE_ADMIN)
+							.orElseThrow(() -> new RuntimeException("Error: Role not found"));
 					roles.add(adminRole);
 					break;
 				case "manager":
 					Role managerRole = roleRepo.findByRoleType(RoleEnum.ROLE_MANAGER)
-					.orElseThrow(()-> new RuntimeException("Error: Role not found"));
+							.orElseThrow(()-> new RuntimeException("Error: Role not found"));
 					roles.add(managerRole);
 					break;
 				default:
