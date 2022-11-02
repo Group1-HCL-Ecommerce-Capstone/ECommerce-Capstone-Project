@@ -33,4 +33,8 @@ public class ProductService {
 	public void deleteProductById(Integer id) {
 		repo.deleteById(id);
 	}
+	
+	public boolean productExistsById(Integer id) {
+		return repo.existsById(id);
+	}
 }

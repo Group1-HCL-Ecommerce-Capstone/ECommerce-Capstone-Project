@@ -28,12 +28,12 @@ public class Product {
 	@Id
 	@Column(name = "prd_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int productId;
+	private int id;
 	private String name;
 	private String description;
 	private String image;
 	
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JoinTable(
 			name = "Products_To_Categories",
 			joinColumns = @JoinColumn(name = "prd_id"),
@@ -41,4 +41,27 @@ public class Product {
 	private Set<Category> categories = new HashSet<>();
 	private double price;
 	private int stock;
+	
+	public Product(String name, String description, String image, Set<Category> categories, double price, int stock) {
+		this.name = name;
+		this.description = description;
+		this.image = image;
+		this.categories = categories;
+		this.price = price;
+		this.stock = stock;
+	}
+	
+	public void addCategory(Category cat) {
+		this.categories.add(cat);
+		cat.getProducts().add(this);
+	}
+	
+	public void removeCategory(int catId) {
+		Category cat = this.categories.stream().filter(c -> c.getId() == catId).findFirst().orElse(null);
+				if (cat != null) {
+					this.categories.remove(cat);
+					cat.getProducts().remove(this);
+				}
+	}
+
 }
