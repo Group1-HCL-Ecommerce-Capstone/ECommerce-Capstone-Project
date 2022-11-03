@@ -39,4 +39,6 @@ public class CategoryService {
 	public boolean categoryExistsById(Integer id) {
 		return repo.existsById(id);
 	}
+	
+	
 }

@@ -34,7 +34,9 @@ public class Category {
 	@Column(name = "category_name")
 	private String categoryName;
 	
-	@ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, fetch = FetchType.LAZY, mappedBy ="categories")
+	
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy ="categories")
 	@JsonIgnore
 	private Set<Product> products = new HashSet<>();
 	

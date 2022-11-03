@@ -17,9 +17,12 @@ import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -33,7 +36,7 @@ public class Product {
 	private String description;
 	private String image;
 	
-	@ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "Products_To_Categories",
 			joinColumns = @JoinColumn(name = "prd_id"),
@@ -50,7 +53,14 @@ public class Product {
 		this.price = price;
 		this.stock = stock;
 	}
-	
+	public Product(String name, String description, String image, double price, int stock) {
+		this.name = name;
+		this.description = description;
+		this.image = image;
+		this.price = price;
+		this.stock = stock;
+	}
+	/*
 	public void addCategory(Category cat) {
 		this.categories.add(cat);
 		cat.getProducts().add(this);
@@ -63,5 +73,6 @@ public class Product {
 					cat.getProducts().remove(this);
 				}
 	}
+	*/
 
 }
