@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
@@ -54,6 +56,12 @@ public class User {
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
+	/*
+	@OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn
+	private Address address;
+	*/
+	
 	public User(String email, String password, String firstName, String lastName) {
 		this.email = email;
 		this.password = password;
