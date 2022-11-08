@@ -61,6 +61,8 @@ public class CartController {
 		}
 	}
 
+	
+	//not working, need to change something in the service i believe
 	@PutMapping("/update/{userId}/{cartItemId}")
 	public ResponseEntity<AddToCartDto> updateCartItem(@RequestBody AddToCartDto cartAdd, @PathVariable Integer userId, @PathVariable Integer cartItemId){
 		try {
@@ -69,6 +71,7 @@ public class CartController {
 			cartServ.updateCartItem(cartAdd, user, prd);
 			return new ResponseEntity<>(cartAdd, HttpStatus.OK);
 		} catch (Exception e) {
+			System.out.println(e.getStackTrace());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

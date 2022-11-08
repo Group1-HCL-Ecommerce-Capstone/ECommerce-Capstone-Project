@@ -1,6 +1,7 @@
 package com.capstone.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,12 +14,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -56,11 +60,9 @@ public class User {
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
-	/*
-	@OneToOne(mappedBy = "users", cascade = CascadeType.ALL)
-	@PrimaryKeyJoinColumn
-	private Address address;
-	*/
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	private List<Address> addresses;
 	
 	public User(String email, String password, String firstName, String lastName) {
 		this.email = email;
