@@ -46,10 +46,11 @@ public class Cart {
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
-	/*
-	@OneToOne(mappedBy = "cart")
+	
+	@ManyToOne
+	@JoinColumn(name = "order_number")
 	private Order order;
-	 */
+	
 	public Cart(Product product, int quantity, User user) {
 		this.user = user;
 		this.product = product;
