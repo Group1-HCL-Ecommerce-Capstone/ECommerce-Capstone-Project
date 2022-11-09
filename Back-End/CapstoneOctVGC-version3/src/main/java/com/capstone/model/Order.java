@@ -36,6 +36,7 @@ public class Order {
 	
 	private Date dateOrdered;
 	private String status;
+	private double totalPrice;
 	
 	@ManyToOne
 	@JoinColumn(name ="address_id")
@@ -47,5 +48,19 @@ public class Order {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
 	private List<Cart> carts;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
+	private List<OrderItem> orderItems;
+	
+	public Order(Date dateOrdered, String status, Address address, User user, double totalPrice, List<Cart> carts) {
+		this.dateOrdered = dateOrdered;
+		this.status = status;
+		this.address = address;
+		this.user = user;
+		this.totalPrice = totalPrice;
+		this.carts = carts;
+	}
+	
+	
 	
 }
