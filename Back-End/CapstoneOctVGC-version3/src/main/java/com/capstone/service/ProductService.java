@@ -30,6 +30,26 @@ public class ProductService {
 		return repo.findById(id);
 	}
 	
+	public Product decreaseStock(Integer prdId, int quantity) {
+		Product prd = repo.findById(prdId).get();
+		int prdStock = prd.getStock();
+		int newStock = prdStock - quantity;
+		if (newStock>-1) {
+			prd.setStock(newStock);
+			return repo.save(prd);
+		} else {
+			return null;
+		}
+	}
+	
+	public Product increaseStock(Integer prdId, int quantity) {
+		Product prd = repo.findById(prdId).get();
+		int prdStock = prd.getStock();
+		int newStock = prdStock + quantity;
+		prd.setStock(newStock);
+		return repo.save(prd);
+	}
+	
 	public void deleteProductById(Integer id) {
 		repo.deleteById(id);
 	}

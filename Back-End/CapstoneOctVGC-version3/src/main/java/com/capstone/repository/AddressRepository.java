@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.capstone.model.Address;
 
 public interface AddressRepository extends JpaRepository<Address, Integer>{
-	//List<Address> findAddressByUserUserId(Integer userID);
+	List<Address> findAddressByUserUserId(Integer userID);
 }

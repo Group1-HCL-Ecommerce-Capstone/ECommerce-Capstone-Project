@@ -2,6 +2,7 @@ package com.capstone.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -28,8 +29,15 @@ public class CartService {
 	}
 	
 	public Cart addProductToCart(AddToCartDto cartAdd, Product product, User user){
-		Cart cart = new Cart(product, cartAdd.getQuantity(), user);
-		return cartRepo.save(cart);
+		cartAdd.setProductId(product.getId());
+		int quantity = cartAdd.getQuantity();
+		int stock = product.getStock();
+		if (stock>=quantity) {
+			Cart cart = new Cart(product, cartAdd.getQuantity(), user);
+			return cartRepo.save(cart);
+		} else {
+			return null;
+		}
 	}
 	
 	public CartDto listCartItems(Integer userId){
@@ -52,12 +60,13 @@ public class CartService {
 		return req;
 	}
 	
+	/*
 	public void updateCartItem(AddToCartDto cartAdd, User user, Product product) {
 		Cart cart = cartRepo.getOne(cartAdd.getId());
 		cart.setQuantity(cartAdd.getQuantity());
 		cartRepo.save(cart);
 	}
-	
+	*/
 	public void deleteCartItem(Integer cartId) throws IllegalArgumentException{
 		if (!cartRepo.existsById(cartId)) {
 			throw new IllegalArgumentException("Cart ID " + cartId + " does not exist");
@@ -77,4 +86,7 @@ public class CartService {
 		return cartRepo.findAllByUserUserId(userId);
 	}
 	
+	public Optional<Cart> findCartByUserAndProductId(Integer userId, Integer prdId){
+		return cartRepo.findCartByUserUserIdAndProductId(userId, prdId);
+	}
 }

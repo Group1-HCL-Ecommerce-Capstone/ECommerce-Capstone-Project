@@ -20,6 +20,7 @@ public class OrderController {
 	@Autowired
 	OrderService orderServ;
 	
+	// i need to put in a check to make sure the address is associated with the user
 	@PostMapping("/add/{userId}/{addressId}")
 	public ResponseEntity<Order> placeOrder(@PathVariable Integer userId, @PathVariable Integer addressId){
 		try {
