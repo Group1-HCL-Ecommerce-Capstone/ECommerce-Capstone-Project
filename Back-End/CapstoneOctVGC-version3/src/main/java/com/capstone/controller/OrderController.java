@@ -6,6 +6,7 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,6 +57,7 @@ public class OrderController {
 	
 	// there is a better way to do this using the enum stuff like in roles but maybe it can be implemented later
 	@PatchMapping("/updatestatus/{orderId}")
+	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
 	public ResponseEntity<Order> updateOrderStatus(@PathVariable Integer orderId, @RequestBody Order order){
 		try {
 			Order databaseOrder = orderServ.findOrder(orderId);
