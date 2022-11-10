@@ -49,13 +49,19 @@ public class CartController {
 		}
 	}
 	
+	// i need to implement something so that when you add the same product it just adds to the quantity
 	@PostMapping("/add/{userId}")
-	public ResponseEntity<AddToCartDto> addToCart(@RequestBody AddToCartDto cartAdd, @PathVariable Integer userId){
+	public ResponseEntity<Cart> addToCart(@RequestBody AddToCartDto cartAdd, @PathVariable Integer userId){
 		try {
 			User user = usrServ.getUserById(userId).get();
 			Product prd = prdServ.findByProductId(cartAdd.getProductId()).get();
-			cartServ.addProductToCart(cartAdd, prd, user);
-			return new ResponseEntity<>(cartAdd, HttpStatus.OK);
+			System.out.println(prd.getName());
+			Cart newCart = cartServ.addProductToCart(cartAdd, prd, user);
+			if (newCart!=null) {
+				return new ResponseEntity<>(newCart, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+			}
 		} catch (Exception e){
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -63,13 +69,31 @@ public class CartController {
 
 	
 	//not working, need to change something in the service i believe
-	@PutMapping("/update/{userId}/{cartItemId}")
-	public ResponseEntity<AddToCartDto> updateCartItem(@RequestBody AddToCartDto cartAdd, @PathVariable Integer userId, @PathVariable Integer cartItemId){
+	// SOLVED
+	@PutMapping("/update/{userId}")
+	public ResponseEntity<Cart> updateCartItem(@RequestBody AddToCartDto cartAdd, @PathVariable Integer userId){
 		try {
-			User user = usrServ.getUserById(userId).get();
-			Product prd = prdServ.findByProductId(cartAdd.getProductId()).get();
-			cartServ.updateCartItem(cartAdd, user, prd);
-			return new ResponseEntity<>(cartAdd, HttpStatus.OK);
+			Cart item = cartServ.findCartByUserAndProductId(userId, cartAdd.getProductId()).get();
+			
+			//System.out.println(item.getProduct().getName());
+			//System.out.println("quantity update: " + item.getQuantity());
+			//System.out.println("product stock: " + item.getProduct().getStock());
+			
+			int stock = item.getProduct().getStock();
+			int quantity = cartAdd.getQuantity();
+			//System.out.println(quantity +"<="+stock );
+			
+			if (quantity <= stock) {
+				item.setQuantity(cartAdd.getQuantity());
+				cartServ.save(item);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+			}
+			
+			if (quantity<=0) {
+				cartServ.deleteCartItem(item.getId());
+			}
+			return new ResponseEntity<>(item, HttpStatus.OK);
 		} catch (Exception e) {
 			System.out.println(e.getStackTrace());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
