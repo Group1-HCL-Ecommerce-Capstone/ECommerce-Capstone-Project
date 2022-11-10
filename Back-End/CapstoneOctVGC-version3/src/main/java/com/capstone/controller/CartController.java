@@ -49,6 +49,7 @@ public class CartController {
 		}
 	}
 	
+	// i need to implement something so that when you add the same product it just adds to the quantity
 	@PostMapping("/add/{userId}")
 	public ResponseEntity<Cart> addToCart(@RequestBody AddToCartDto cartAdd, @PathVariable Integer userId){
 		try {
@@ -68,18 +69,19 @@ public class CartController {
 
 	
 	//not working, need to change something in the service i believe
+	// SOLVED
 	@PutMapping("/update/{userId}")
 	public ResponseEntity<Cart> updateCartItem(@RequestBody AddToCartDto cartAdd, @PathVariable Integer userId){
 		try {
 			Cart item = cartServ.findCartByUserAndProductId(userId, cartAdd.getProductId()).get();
 			
-			System.out.println(item.getProduct().getName());
-			System.out.println("quantity update: " + item.getQuantity());
-			System.out.println("product stock: " + item.getProduct().getStock());
+			//System.out.println(item.getProduct().getName());
+			//System.out.println("quantity update: " + item.getQuantity());
+			//System.out.println("product stock: " + item.getProduct().getStock());
 			
 			int stock = item.getProduct().getStock();
 			int quantity = cartAdd.getQuantity();
-			System.out.println(quantity +"<="+stock );
+			//System.out.println(quantity +"<="+stock );
 			
 			if (quantity <= stock) {
 				item.setQuantity(cartAdd.getQuantity());

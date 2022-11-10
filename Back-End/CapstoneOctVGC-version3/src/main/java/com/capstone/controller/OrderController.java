@@ -1,13 +1,16 @@
 package com.capstone.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,5 +54,22 @@ public class OrderController {
 		}
 	}
 	
+	// there is a better way to do this using the enum stuff like in roles but maybe it can be implemented later
+	@PatchMapping("/updatestatus/{orderId}")
+	public ResponseEntity<Order> updateOrderStatus(@PathVariable Integer orderId, @RequestBody Order order){
+		try {
+			Order databaseOrder = orderServ.findOrder(orderId);
+			String status = order.getStatus();		
+			
+			if (Objects.nonNull(status)&&status.equalsIgnoreCase("shipped")) {
+				databaseOrder.setStatus(status);
+			} else if(Objects.nonNull(status)&&status.equalsIgnoreCase("delivered")) {
+				databaseOrder.setStatus(status);
+			}
+			return new ResponseEntity<>(orderServ.save(databaseOrder), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
 }

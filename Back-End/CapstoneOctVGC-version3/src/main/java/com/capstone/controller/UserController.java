@@ -188,6 +188,8 @@ public class UserController {
 		try {
 			User usr = usrService.getUserById(id)
 								 .orElseThrow(()-> new RuntimeException("Error: User not found"));
+			// this gets rid of the foreign key constraint in the users_to_roles table
+			// otherwise there is a SQL integrity constraint violation
 			usr.setRoles(null);
 			usrService.deleteUser(id);
 			return new ResponseEntity<>(HttpStatus.OK);

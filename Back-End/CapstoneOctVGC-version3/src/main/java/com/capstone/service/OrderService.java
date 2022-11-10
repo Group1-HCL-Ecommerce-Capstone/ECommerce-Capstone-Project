@@ -37,6 +37,7 @@ public class OrderService {
 	UserService userService;
 	
 	// this is not working somewhere
+	// SOLVED
 	public Order createOrder(Integer userId, Integer addressId) {
 		CartDto cart = cartService.listCartItems(userId);
 		System.out.println(cart.getTotalPrice());
@@ -50,25 +51,36 @@ public class OrderService {
 		newOrder.setStatus("ordered");
 		newOrder.setTotalPrice(cart.getTotalPrice());
 		newOrder.setCarts(cartService.findAllByUserId(userId));
+		Order savedOrder = orderRepo.save(newOrder);
 		System.out.println(newOrder.toString());
+		
 		
 		for (CartItemDto item: cartItems) {
 			
+			System.out.println(item.getProduct().getId());
+			System.out.println(item.getQuantity());
+			
 			Product inStock = prdServ.decreaseStock(item.getProduct().getId(), item.getQuantity());
-			OrderItem orderItems = new OrderItem();
+			System.out.println(inStock.getName());
 			if (inStock !=null) {
+				OrderItem orderItems = new OrderItem();
 				orderItems.setQuantity(item.getQuantity());
 				orderItems.setProductId(item.getProduct().getId());
 				orderItems.setOrder(newOrder);
-			}
-			
-			itemRepo.save(orderItems);
+				itemRepo.save(orderItems);
+				System.out.println(orderItems.getProductId());
+			}			
 		}
 		
-		Order savedOrder = orderRepo.save(newOrder);
-		System.out.println(savedOrder.toString());
+		
+		
+		//System.out.println(savedOrder.toString());
 		cartService.deleteUserCartItemsbyId(userId);
 		return savedOrder;
+	}
+	
+	public Order save(Order order) {
+		return orderRepo.save(order);
 	}
 	
 	public List<Order> listOrders(Integer userId){
