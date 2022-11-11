@@ -1,8 +1,9 @@
 export class User {
-    id: number = 0;
+    [x: string]: any;
+    userId: number = 0;
     firstName: string = "";
     lastName: string = "";
     email: string = "";
     password: string = "";
-    role: string = "";
+    roles: string[] = [];
 }

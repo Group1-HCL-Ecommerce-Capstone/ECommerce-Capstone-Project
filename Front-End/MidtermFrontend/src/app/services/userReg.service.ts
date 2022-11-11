@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user';
-import { Observable } from 'rxjs';
+import { LocalService } from './local.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,13 +9,29 @@ import { Observable } from 'rxjs';
 export class UserRegService {
 
   private userRegUrl: string;
+  currentUser: any;
 
-  constructor(private http: HttpClient) { 
-    this.userRegUrl = 'http://localhost:8181/register/reg';
+  constructor(private http: HttpClient,
+    private localStore: LocalService) {
+    this.userRegUrl = 'http://localhost:8181/auth';
+    this.currentUser = this.localStore.getData();
   }
 
-  public save(user: User){
-    this.http.post<User>(this.userRegUrl, user).subscribe();
+  save(user: User) {
+    this.http.post<User>(this.userRegUrl + '/register', user).subscribe();
+  }
 
+  login(user: User) {
+    this.http.post<any>(this.userRegUrl + '/login', user).subscribe(Response => {
+      console.log(Response);
+      this.localStore.saveData(Response);
+    });
+  }
+
+  isLoggedIn() {
+    if (localStorage.getItem('storedUser')) {
+      return true;
+    }
+    return false;
   }
 }

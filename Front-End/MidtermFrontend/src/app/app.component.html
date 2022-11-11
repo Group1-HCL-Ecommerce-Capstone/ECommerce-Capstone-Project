@@ -9,7 +9,7 @@
     <button mat-button routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page">Profile</button>
     <button mat-button routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">Login</button>
   </span>
-  <button mat-button sec:authorize="isAuthenticated()">Logout</button>
+  <button mat-button (click)="logout()">Logout</button>
 
 </mat-toolbar>
 <div class="contentpane">

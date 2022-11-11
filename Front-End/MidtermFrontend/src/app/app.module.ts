@@ -24,6 +24,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { UserRegService } from './services/userReg.service';
 import { ProductCRUDComponent } from './components/product-crud/product-crud.component';
 import { UserCRUDComponent } from './components/user-crud/user-crud.component';
+import { LocalService } from './services/local.service';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,9 @@ import { UserCRUDComponent } from './components/user-crud/user-crud.component';
     MatTableModule
 
   ],
-  providers: [UserRegService],
+  providers: [UserRegService, LocalService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+  currentUser: any;
+}

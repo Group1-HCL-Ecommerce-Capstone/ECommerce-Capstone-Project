@@ -6,4 +6,5 @@ export class Product {
     price: string = "";
     stock: number = 0;
     available: boolean = false;
+    categories: string[] = [];
 }

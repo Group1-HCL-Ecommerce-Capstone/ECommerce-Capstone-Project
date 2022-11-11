@@ -11,11 +11,11 @@ export class ProductService {
   private productsUrl: string;
 
   constructor(private http: HttpClient) { 
-    this.productsUrl = 'http://localhost:8181/api/products';
+    this.productsUrl = 'http://localhost:8181/admin/products';
   }
 
   public findAll(): Observable<Product[]>{
-    return this.http.get<Product[]>(this.productsUrl);
+    return this.http.get<Product[]>(this.productsUrl + '/all');
   }
 
   //public addProduct():
