@@ -28,7 +28,7 @@ import com.capstone.repository.CategoryRepository;
 import com.capstone.service.ProductService;
 
 @RestController
-@RequestMapping("/admin/products")
+@RequestMapping("/products")
 @CrossOrigin(origins = "http://localhost:4200/")
 public class ProductController {
 	@Autowired
@@ -37,7 +37,7 @@ public class ProductController {
 	CategoryRepository catRepo;
 
 	@GetMapping("/all")
-	//@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Product>> listOfAllProducts() {
 		try {
 			List<Product> allProducts = prdService.listAllPrds();
@@ -52,7 +52,6 @@ public class ProductController {
 	}
 
 	@GetMapping("/find/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Optional<Product>> selectProductById(@PathVariable Integer id) {
 		try {
 			Optional<Product> foundProduct = prdService.findByProductId(id);
@@ -63,7 +62,7 @@ public class ProductController {
 	}
 
 	@PostMapping("/add")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
 	public ResponseEntity<Product> registerProduct(@RequestBody ProductRequest prdReq) {
 		try {
 			Product registeredProduct = new Product(prdReq.getName(), prdReq.getDescription(), prdReq.getImage(),
@@ -94,7 +93,7 @@ public class ProductController {
 	}
 
 	@PatchMapping("/update/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
 	public ResponseEntity<Product> updateProduct(@PathVariable Integer id, @RequestBody ProductRequest prdReq) {
 		try {
 			Product databaseProduct = prdService.findByProductId(id).get();
@@ -112,6 +111,7 @@ public class ProductController {
 			// request, it changes the values to the defaults
 			// SOLVED
 
+			// with the way i have it, you cannot update the price to be $0 or have 0 stock
 			if (Objects.nonNull(prdReq.getPrice()) && prdReq.getPrice()>0.0) {
 				databaseProduct.setPrice(prdReq.getPrice());
 			}
@@ -143,7 +143,7 @@ public class ProductController {
 	}
 
 	@DeleteMapping("/delete/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
 	public ResponseEntity<HttpStatus> deleteProductById(@PathVariable Integer id) {
 		try {
 			Product prd = prdService.findByProductId(id)

@@ -30,6 +30,7 @@ import com.capstone.payload.RegisterRequest;
 import com.capstone.repository.RoleRepository;
 import com.capstone.repository.UserRepository;
 import com.capstone.security.JwtUtils;
+import com.capstone.service.EmailService;
 import com.capstone.service.UserDetailsImpl;
 
 @RestController
@@ -50,6 +51,10 @@ public class AuthController {
 
 	@Autowired
 	JwtUtils jwtUtils;
+	
+	//added autowired for EmailService
+	@Autowired
+	private EmailService emailService;
 
 	@PostMapping("/login")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest login) {
@@ -87,6 +92,8 @@ public class AuthController {
 			Role userRole = roleRepo.findByRoleType(RoleEnum.ROLE_USER)
 					.orElseThrow(()-> new RuntimeException("Error: Role not found"));
 			roles.add(userRole);
+			//email is sent to user once they make an account, need to update it to specify user's email
+			emailService.sendMail(register.getEmail() , "Registration Complete", "Thank you for making an account with us!");
 		} else {
 			rolesString.forEach(role -> {
 				switch (role) {
@@ -104,6 +111,8 @@ public class AuthController {
 					Role userRole = roleRepo.findByRoleType(RoleEnum.ROLE_USER)
 					.orElseThrow(()-> new RuntimeException("Error: Role not found"));
 					roles.add(userRole);
+					//email is sent to user once they make an account, need to update it to specify user's email
+					emailService.sendMail(register.getEmail() , "Registration Complete", "Thank you for making an account with us!");
 					break;
 
 				}

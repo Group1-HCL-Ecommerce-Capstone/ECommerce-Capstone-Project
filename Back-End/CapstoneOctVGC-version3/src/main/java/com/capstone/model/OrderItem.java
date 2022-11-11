@@ -1,23 +1,17 @@
 package com.capstone.model;
 
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.capstone.payload.dto.CartItemDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,36 +21,29 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Entity
-@Table(name = "Cart")
-public class Cart {
+@Table(name = "orderitems")
+public class OrderItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name ="cart_id")
+	@Column(name = "orderitem_id")
 	private int id;
 	
+	private @NotNull int quantity;
+	private @NotNull int productId;
+	
+	@ManyToOne
 	@JsonIgnore
-	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false, name = "user_id")
-	private User user;
-	
-	private int quantity;
-	
-	@ManyToOne
-	@JoinColumn(name = "product_id")
-	private Product product;
-	
-	@ManyToOne
 	@JoinColumn(name = "order_number")
 	private Order order;
-	
-	public Cart(Product product, int quantity, User user) {
-		this.user = user;
-		this.product = product;
+
+	public OrderItem(int quantity, Order order, int productId) {
 		this.quantity = quantity;
+		this.order = order;
+		this.productId = productId;
 	}
 	
 }

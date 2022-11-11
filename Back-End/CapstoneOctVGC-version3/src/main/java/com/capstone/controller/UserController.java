@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capstone.model.Product;
 import com.capstone.model.Role;
 import com.capstone.model.RoleEnum;
 import com.capstone.model.User;
@@ -126,7 +127,6 @@ public class UserController {
 	}
 	
 	@PutMapping("/update/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<User> updateUserDetails(@PathVariable Integer id, @RequestBody RegisterRequest usr){
 		try {
 			User databaseUser = usrService.getUserById(id).get();
@@ -188,6 +188,11 @@ public class UserController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<HttpStatus> deleteUserById(@PathVariable Integer id){
 		try {
+			User usr = usrService.getUserById(id)
+								 .orElseThrow(()-> new RuntimeException("Error: User not found"));
+			// this gets rid of the foreign key constraint in the users_to_roles table
+			// otherwise there is a SQL integrity constraint violation
+			usr.setRoles(null);
 			usrService.deleteUser(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (NoSuchElementException e) {

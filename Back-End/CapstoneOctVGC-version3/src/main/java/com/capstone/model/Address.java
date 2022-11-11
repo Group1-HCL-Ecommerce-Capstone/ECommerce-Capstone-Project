@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,6 +32,7 @@ import lombok.Setter;
 @Table(name = "Addresses")
 public class Address {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "address_id")
 	private int id;
 	private String street;
@@ -44,8 +47,7 @@ public class Address {
 	@Size(max=15)
 	private String zipcode;
 	
-	@Size(max=13)
-	private int phone;
+	private String phone;
 	
 	@ManyToOne
 	@JoinColumn(name ="user_id")
@@ -54,5 +56,18 @@ public class Address {
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "address")
 	private List<Order> orders;
+
+	public Address(String street, String city, @Size(max = 6) String state, @Size(max = 3) String country,
+			@Size(max = 15) String zipcode, String phone, User user) {
+		this.street = street;
+		this.city = city;
+		this.state = state;
+		this.country = country;
+		this.zipcode = zipcode;
+		this.phone = phone;
+		this.user = user;
+	}
+	
+	
 	
 }

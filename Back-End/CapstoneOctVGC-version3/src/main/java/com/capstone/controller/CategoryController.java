@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,7 @@ import com.capstone.service.CategoryService;
 import com.capstone.service.ProductService;
 
 @RestController
-@RequestMapping("/admin/categories")
+@RequestMapping("/categories")
 @CrossOrigin(origins = "http://localhost:4200/")
 public class CategoryController {
 	@Autowired
@@ -82,13 +83,15 @@ public class CategoryController {
 	}
 	
 	@DeleteMapping("remove/{id}")
+	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
 	public ResponseEntity<HttpStatus> deleteCategoryById(@PathVariable Integer id){
 		try {
-			if (prdRepo.findProductsByCategoriesId(id)!=null) {
+			// checks if the category is associated with any product before deleting
+			if (prdRepo.findProductsByCategoriesId(id).isEmpty()==false) {
 				return new ResponseEntity<>(HttpStatus.CONFLICT);
 			} else {
 				catService.deleteCategoryById(id);
-				return new ResponseEntity<>(HttpStatus.ACCEPTED);
+				return new ResponseEntity<>(HttpStatus.OK);
 			}
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
