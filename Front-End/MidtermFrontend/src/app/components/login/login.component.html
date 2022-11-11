@@ -1,0 +1,34 @@
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 offset-md-3">
+            <h1>Login Page</h1>
+            <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+
+                <div class="form-group">
+                    <label for="username"> Username or email: </label>
+                    <input type="text" [(ngModel)]="user.email" class="form-control" id="username" name="username"
+                        required placeholder="Enter username or email" autofocus="autofocus" />
+                </div>
+
+                <div class="form-group">
+                    <label for="password"> Password: </label>
+                    <input type="password" [(ngModel)]="user.password" class="form-control" id="password"
+                        name="password" required placeholder="Enter password" autofocus="autofocus" />
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <input type="submit" name="login-submit" id="login-submit"
+                                class="form-control btn btn-primary" value="Log In" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="form-group">
+                <span>New User? <a href="/register">Register here</a></span>
+            </div>
+        </div>
+    </div>
+</div>
