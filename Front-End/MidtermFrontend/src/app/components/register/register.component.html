@@ -1,0 +1,52 @@
+<br>
+<div class="jumbotron">
+    <div class="container">
+        <div class="col-sm-6 offset-md-3">
+            <h1>Registration</h1>
+            <form (ngSubmit)="onSubmit(userForm)" #userForm="ngForm">
+                <div class="row" *ngIf="successMsg">
+                    <div class="col-xs-12">
+                        <p class="alert alert-success">
+                            <strong>Registration Successful! </strong><a href="/login">Log in here</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="firstName">
+                        First Name
+                    </label>
+                    <input id="firstName" name="firstName" [(ngModel)]="user.firstName" class="form-control" required
+                        firstName="ngModel" />
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="lastName">
+                        Last Name
+                    </label>
+                    <input id="lastName" name="lastName" [(ngModel)]="user.lastName" class="form-control" required
+                        lastName="ngModel" />
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="email">
+                        Email
+                    </label>
+                    <input id="email" name="email" [(ngModel)]="user.email" class="form-control" required
+                        email="ngModel" />
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="password">
+                        Password
+                    </label>
+                    <input id="password" name="password" [(ngModel)]="user.password" class="form-control" type="password" required 
+                     password="ngModel" />
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-info">Register</button>
+                    <span>Already registered? <a href="/login">Login here</a></span>
+                </div>
+            </form>
+        </div>
+    </div>
