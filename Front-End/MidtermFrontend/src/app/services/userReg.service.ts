@@ -23,7 +23,6 @@ export class UserRegService {
 
   login(user: User) {
     this.http.post<any>(this.userRegUrl + '/login', user).subscribe(Response => {
-      console.log(Response);
       this.localStore.saveData(Response);
     });
   }

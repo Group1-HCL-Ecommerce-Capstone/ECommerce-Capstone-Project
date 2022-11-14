@@ -1,4 +1,4 @@
-import { Component,  } from '@angular/core';
+import { Component, } from '@angular/core';
 import { LocalService } from './services/local.service';
 
 @Component({
@@ -10,16 +10,15 @@ import { LocalService } from './services/local.service';
 export class AppComponent {
   title = 'MidtermFrontend'
 
-  currentUser:any;
-  
-  constructor(private localStore: LocalService) {
-    this.currentUser =this.localStore.getData();
-   }
+  currentUser: any;
 
-  logout(){
+  constructor(private localStore: LocalService) {
+    this.currentUser = this.localStore.getData();
+  }
+
+  logout() {
     this.localStore.clearData();
-    console.log("logout");
     location.reload();
   }
-  
+
 }
