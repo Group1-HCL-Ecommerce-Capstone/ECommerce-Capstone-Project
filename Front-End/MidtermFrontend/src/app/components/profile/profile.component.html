@@ -1,1 +1,52 @@
-<p>profile works!</p>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 offset-md-3">
+            <h1>User Details</h1>
+            <form #DetailsForm="ngForm" (ngSubmit)="onSubmit(DetailsForm)">
+                <h3>Address</h3>
+                <div class="form-group">
+                    <label for="username"> Street: </label>
+                    <input type="text" [(ngModel)]="userDetails.street" class="form-control" id="street" name="street"
+                        required placeholder="Enter street" autofocus="autofocus" />
+                </div>
+                <div class="form-group">
+                    <label for="city"> City: </label>
+                    <input type="text" [(ngModel)]="userDetails.city" class="form-control" id="city" name="city"
+                        placeholder="Enter city" autofocus="autofocus" />
+                </div>
+                <div class="form-group">
+                    <label for="state"> State: </label>
+                    <input type="text" [(ngModel)]="userDetails.state" class="form-control" id="state" name="state"
+                        placeholder="Enter State" autofocus="autofocus" />
+                </div>
+                <div class="form-group">
+                    <label for="zipcode"> Zip: </label>
+                    <input type="text" [(ngModel)]="userDetails.zipcode" class="form-control" id="zipcode"
+                        name="zipcode" placeholder="Enter zipcode" autofocus="autofocus" />
+                </div>
+                <div class="form-group">
+                    <label for="country"> Country: </label>
+                    <input type="text" [(ngModel)]="userDetails.country" class="form-control" id="country"
+                        name="country" placeholder="Enter country" autofocus="autofocus" />
+                </div>
+                <div class="form-group">
+                    <label for="phone"> Phone: </label>
+                    <input type="text" [(ngModel)]="userDetails.phone" class="form-control" id="phone" name="phone"
+                        placeholder="Enter phone number" autofocus="autofocus" />
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <input type="submit" name="UserDetails-submit" id="UserDetails-submit"
+                                class="form-control btn btn-primary" value="Submit" />
+                            <input (click)="updateAddress(DetailsForm)" type="button" name="UserDetails-update" id="UserDetails-update"
+                                class="form-control btn btn-secondary" value="Update" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

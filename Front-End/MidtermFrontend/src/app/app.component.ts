@@ -12,7 +12,7 @@ export class AppComponent {
 
   currentUser: any;
 
-  constructor(private localStore: LocalService) {
+  constructor(public localStore: LocalService) {
     this.currentUser = this.localStore.getData();
   }
 

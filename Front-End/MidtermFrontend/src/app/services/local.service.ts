@@ -1,4 +1,8 @@
+import { Injectable } from '@angular/core';
 
+@Injectable({
+  providedIn: 'root'
+})
 export class LocalService {
 
   constructor() {}
@@ -13,5 +17,12 @@ export class LocalService {
 
     public clearData(){
       localStorage.clear();
+    }
+
+    isLoggedIn() {
+      if (localStorage.getItem('storedUser')) {
+        return true;
+      }
+      return false;
     }
 }

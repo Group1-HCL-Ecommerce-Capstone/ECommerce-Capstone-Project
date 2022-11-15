@@ -1,7 +1,10 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { enableProdMode, Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user';
+import { CurrentUser } from '../models/current-user';
+import { Observable } from 'rxjs';
 import { LocalService } from './local.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,27 +13,40 @@ export class UserRegService {
 
   private userRegUrl: string;
   currentUser: any;
+  err: boolean = false;
+  errMessage: string = '';
 
-  constructor(private http: HttpClient,
-    private localStore: LocalService) {
+  cUser: CurrentUser = new CurrentUser;
+
+  constructor(
+    private http: HttpClient,
+    private localStore: LocalService,
+    private router: Router
+    ) {
     this.userRegUrl = 'http://localhost:8181/auth';
     this.currentUser = this.localStore.getData();
   }
 
   save(user: User) {
-    this.http.post<User>(this.userRegUrl + '/register', user).subscribe();
+    this.err = false;
+    this.http.post<any>(this.userRegUrl + '/register', user, { observe: 'response' }).subscribe((response) => { this.err = false },
+      error => {
+        this.err = true;
+        this.errMessage = error.error.message;
+      });
   }
 
   login(user: User) {
-    this.http.post<any>(this.userRegUrl + '/login', user).subscribe(Response => {
-      this.localStore.saveData(Response);
-    });
+    this.http.post<any>(this.userRegUrl + '/login', user).subscribe((response) => {
+      this.localStore.saveData(response);
+      this.router.navigate(['home']);
+    },
+      error => {
+        this.err = true;
+        this.errMessage = error.error.message;
+      });
+
   }
 
-  isLoggedIn() {
-    if (localStorage.getItem('storedUser')) {
-      return true;
-    }
-    return false;
-  }
+
 }

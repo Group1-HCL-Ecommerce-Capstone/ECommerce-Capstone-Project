@@ -14,12 +14,12 @@
 </mat-card-actions>
 </mat-card>-->
 
-<mat-grid-list cols="3" rowHeight="300">
-    <mat-grid-tile *ngFor="let product of products" >
+<mat-grid-list cols="3" rowHeight="400">
+    <mat-grid-tile *ngFor="let product of products">
         <mat-card class="product-card">
-            
-            <img mat-card-lg-image src={{product.img_url}} alt = "product.img_url">
-            
+
+            <img mat-card-lg-image src="" alt="product.img_url">
+
             <mat-card-content>
                 <h3>{{product.name}}</h3>
                 <h5>${{product.price}}</h5>
@@ -27,7 +27,17 @@
                 <p>{{product.description}}</p>
             </mat-card-content>
             <mat-card-actions>
-                <button mat-button>Add to Cart</button>
+                <div>
+
+                    <form [formGroup]="quantForm">
+                        <mat-form-field>
+                            <mat-label>Quantity</mat-label>
+                            <input matInput [formControl]="quantControl" type="number" placeholder="1" min="0"
+                                max="{{product.stock}}">
+                        </mat-form-field>
+                        <button mat-button (click)="addToCart(product)">Add to Cart</button>
+                    </form>
+                </div>
 
             </mat-card-actions>
         </mat-card>
