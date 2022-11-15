@@ -15,7 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capstone.model.Address;
 import com.capstone.model.Order;
+import com.capstone.model.User;
+//added pay-load LoginRequest to get email address
+import com.capstone.payload.LoginRequest;
+import com.capstone.repository.AddressRepository;
+import com.capstone.repository.UserRepository;
+import com.capstone.service.EmailService;
 import com.capstone.service.OrderService;
 
 @RestController
@@ -24,11 +31,31 @@ public class OrderController {
 	@Autowired
 	OrderService orderServ;
 	
+	//added auto-wired for EmailService
+	@Autowired
+	private EmailService emailService;
+	@Autowired
+	UserRepository userRepo;
+	@Autowired
+	AddressRepository addressRepo;
+	
+	
 	// i need to put in a check to make sure the address is associated with the user
+	//added LoginRequest login and Integer orderId objects to get order number confirmation and email sent to the right email address
 	@PostMapping("/add/{userId}/{addressId}")
-	public ResponseEntity<Order> placeOrder(@PathVariable Integer userId, @PathVariable Integer addressId){
+	public ResponseEntity<Order> placeOrder(@PathVariable Integer userId, @PathVariable Integer addressId, LoginRequest login){
 		try {
 			Order placedOrder = orderServ.createOrder(userId, addressId);
+			String userEmail = userRepo.getById(userId).getEmail();
+			String userStreet = addressRepo.getById(addressId).getStreet();
+			String userState = addressRepo.getById(addressId).getCity();
+			String userCountry = addressRepo.getById(addressId).getCountry();
+			String userZip = addressRepo.getById(addressId).getZipcode();
+			
+			//adding email confirmation and order number for confirmation
+			emailService.sendMail(userEmail , "Order placed! Order number: "+ placedOrder.getId(), "Thank you for placing an order with us! Here's your order details: " 
+			+ "\n"  + "Order Status: " + placedOrder.getStatus() + "\n" + "Shipping Address: " + userStreet + ", " + userState + " " + userZip + " " + userCountry +
+			"\n" + "Total Order Price: $" + placedOrder.getTotalPrice());
 			return new ResponseEntity<>(placedOrder, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -68,8 +95,24 @@ public class OrderController {
 			} else if(Objects.nonNull(status)&&status.equalsIgnoreCase("delivered")) {
 				databaseOrder.setStatus(status);
 			}
+			int userId = databaseOrder.getUser().getUserId();
+			
+			//push email status of order update
+			User user = userRepo.findById(userId).get();
+			String email = user.getEmail();
+			Address address = databaseOrder.getAddress();
+			String street = address.getStreet();
+			String city = address.getCity();
+			String state = address.getState();
+			String zip = address.getZipcode();
+			String country = address.getCountry();
+			emailService.sendMail(email , "Order Update! Order number: "+ orderId, "Thank you for your patience! Here's your updated order details: "
+			+ "\n" + "Order Status: " + status + "\n" + "Shipping Address: " + street + ", " + city + " " + state + " " 
+					+ zip + " "+ country + "\n" + "Total Order Price: $"+ databaseOrder.getTotalPrice());
+			 
 			return new ResponseEntity<>(orderServ.save(databaseOrder), HttpStatus.OK);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
