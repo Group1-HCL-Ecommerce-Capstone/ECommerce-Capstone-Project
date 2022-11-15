@@ -15,6 +15,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 import { HomeComponent } from './components/home/home.component';
 import { CatalogComponent } from './components/catalog/catalog.component';
@@ -24,7 +26,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { UserRegService } from './services/userReg.service';
 import { ProductCRUDComponent } from './components/product-crud/product-crud.component';
 import { UserCRUDComponent } from './components/user-crud/user-crud.component';
-import { LocalService } from './services/local.service';
+import { CartService } from './services/cart.service';
 
 @NgModule({
   declarations: [
@@ -52,10 +54,12 @@ import { LocalService } from './services/local.service';
     MatCardModule,
     MatGridListModule,
     FormsModule,
-    MatTableModule
+    MatTableModule,
+    ReactiveFormsModule,
+    MatInputModule
 
   ],
-  providers: [UserRegService, LocalService],
+  providers: [UserRegService, CartService],
   bootstrap: [AppComponent]
 })
 export class AppModule { 

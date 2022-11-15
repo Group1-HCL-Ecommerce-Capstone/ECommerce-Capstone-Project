@@ -1,15 +1,13 @@
 <html>
 <mat-toolbar color="primary">
   <span>MTP Store</span>
-  <span class="heading1">
-    <button mat-button routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">Home</button>
-    <button mat-button routerLink="/catalog" routerLinkActive="active" ariaCurrentWhenActive="page">Catalog</button>
-  </span>
-  <span class="heading2">
-    <button mat-button routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page">Profile</button>
-    <button mat-button routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page">Login</button>
-  </span>
-  <button mat-button (click)="logout()">Logout</button>
+  <button mat-button routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">Home</button>
+  <button mat-button routerLink="/catalog" routerLinkActive="active" ariaCurrentWhenActive="page">Catalog</button>
+  <span class="example-spacer"></span>
+  <button mat-button routerLink="/profile"  *ngIf="localStore.isLoggedIn()" routerLinkActive="active" ariaCurrentWhenActive="page">Profile</button>
+  <button *ngIf="!localStore.isLoggedIn()" mat-button routerLink="/login" routerLinkActive="active"
+    ariaCurrentWhenActive="page">Login</button>
+  <button *ngIf="localStore.isLoggedIn()" mat-button (click)="logout()">Logout</button>
 
 </mat-toolbar>
 <div class="contentpane">

@@ -37,7 +37,7 @@ public class ProductController {
 	CategoryRepository catRepo;
 
 	@GetMapping("/all")
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<Product>> listOfAllProducts() {
 		try {
 			List<Product> allProducts = prdService.listAllPrds();

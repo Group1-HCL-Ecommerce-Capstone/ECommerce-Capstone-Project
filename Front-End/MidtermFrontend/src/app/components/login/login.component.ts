@@ -11,6 +11,9 @@ import { FormBuilder, FormControl, FormGroup, NgForm } from '@angular/forms';
 })
 export class LoginComponent implements OnInit {
   user: User;
+
+  isErr: boolean | undefined;
+  errMessage: string = '';
   constructor(
     private userRegService: UserRegService,
     private router: Router
@@ -19,12 +22,14 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
   }
-
 
   onSubmit(form: NgForm) {
     this.userRegService.login(this.user);
+    setTimeout(() => {
+      this.errMessage = this.userRegService.errMessage;
+      this.isErr = this.userRegService.err;
+    }, 200);
     form.resetForm();
   }
 
