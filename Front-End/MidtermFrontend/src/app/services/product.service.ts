@@ -18,6 +18,19 @@ export class ProductService {
     return this.http.get<Product[]>(this.productsUrl + '/all');
   }
 
-  //public addProduct():
+  public addProduct(product: Product){
+    return this.http.post<any>(this.productsUrl + "/add", product)
+  }
 
+  public editProduct(product: Product, prdId: number){
+    return this.http.patch<any>(this.productsUrl+'/update/'+prdId, product);
+  }
+
+  public findProduct(id: number){
+    return this.http.get<any>(this.productsUrl+'/find/'+id);
+  }
+
+  public deleteProduct(id: number){
+    return this.http.delete(this.productsUrl+'/delete/'+id);
+  }
 }

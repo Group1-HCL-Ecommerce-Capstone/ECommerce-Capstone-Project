@@ -3,6 +3,8 @@
   <span>MTP Store</span>
   <button mat-button routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">Home</button>
   <button mat-button routerLink="/catalog" routerLinkActive="active" ariaCurrentWhenActive="page">Catalog</button>
+  <button mat-button routerLink="/manage/products" routerLinkActive="active" ariaCurrentWhenActive="page">Products</button>
+  <!-- Insert Products button when admin is logged in-->
   <span class="example-spacer"></span>
   <button mat-button routerLink="/profile"  *ngIf="localStore.isLoggedIn()" routerLinkActive="active" ariaCurrentWhenActive="page">Profile</button>
   <button *ngIf="!localStore.isLoggedIn()" mat-button routerLink="/login" routerLinkActive="active"

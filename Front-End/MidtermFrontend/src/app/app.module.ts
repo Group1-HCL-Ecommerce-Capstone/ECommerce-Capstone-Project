@@ -27,6 +27,7 @@ import { UserRegService } from './services/userReg.service';
 import { ProductCRUDComponent } from './components/product-crud/product-crud.component';
 import { UserCRUDComponent } from './components/user-crud/user-crud.component';
 import { CartService } from './services/cart.service';
+import { AddEditProductComponent } from './components/add-edit-product/add-edit-product.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { CartService } from './services/cart.service';
     LoginComponent,
     RegisterComponent,
     ProductCRUDComponent,
-    UserCRUDComponent
+    UserCRUDComponent,
+    AddEditProductComponent,
 
   ],
   imports: [
