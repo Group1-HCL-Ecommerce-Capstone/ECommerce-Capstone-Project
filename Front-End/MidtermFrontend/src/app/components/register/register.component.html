@@ -11,6 +11,13 @@
                         </p>
                     </div>
                 </div>
+                <div class="row" *ngIf="isErr">
+                    <div class="col-xs-12">
+                        <p class="alert alert-danger">
+                            <strong>Registration unsuccessful! {{errMessage}}</strong>
+                        </p>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="control-label" for="firstName">
                         First Name

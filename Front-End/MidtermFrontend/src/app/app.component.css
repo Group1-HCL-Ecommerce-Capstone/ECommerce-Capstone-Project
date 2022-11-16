@@ -1,4 +1,4 @@
-heading2 {
-    justify-content: right;
-    align-items: center;
-}
+.example-spacer {
+    flex: 1 1 auto;
+  }
+  

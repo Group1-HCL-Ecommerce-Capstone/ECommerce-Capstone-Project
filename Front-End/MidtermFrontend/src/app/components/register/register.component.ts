@@ -13,7 +13,10 @@ export class RegisterComponent implements OnInit {
 
   user: User;
   
-  successMsg: boolean = false;
+  successMsg: boolean | undefined;
+  isErr: boolean | undefined;
+  errMessage: string = '';
+  
   constructor(private userRegService: UserRegService,
     private router: Router) {
     this.user = new User();
@@ -21,9 +24,13 @@ export class RegisterComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     this.userRegService.save(this.user);
-    this.successMsg = true;
+    setTimeout(() => {
+    this.successMsg = !this.userRegService.err;
+    this.errMessage = this.userRegService.errMessage;
+    this.isErr = this.userRegService.err;
+    }, 200);
+    
     form.resetForm();
-
   }
 
   ngOnInit(): void {

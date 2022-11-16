@@ -11,7 +11,7 @@ export class ProductService {
   private productsUrl: string;
 
   constructor(private http: HttpClient) { 
-    this.productsUrl = 'http://localhost:8181/admin/products';
+    this.productsUrl = 'http://localhost:8181/products';
   }
 
   public findAll(): Observable<Product[]>{
