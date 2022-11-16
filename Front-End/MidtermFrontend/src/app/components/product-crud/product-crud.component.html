@@ -1,7 +1,12 @@
 <p>product crud works!</p>
-<table mat-table >
-    <tr *ngFor="let product from products">
-        <p>products</p>{{product.name}} {{product.cost}} {{product.description}}
-    </tr>
-    <p>help</p>
+<table mat-table class="mat-elevation-z8 demo-table">
+    <ng-container *ngFor="let product of products">
+        <th mat-header-cell>
+            Products
+        </th>
+        <td>
+            {{product.name}}
+        </td>
+    </ng-container>
+
 </table>
