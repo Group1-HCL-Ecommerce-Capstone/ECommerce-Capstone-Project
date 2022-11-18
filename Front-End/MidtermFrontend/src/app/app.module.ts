@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 import { HomeComponent } from './components/home/home.component';
 import { CatalogComponent } from './components/catalog/catalog.component';
@@ -27,6 +28,7 @@ import { UserRegService } from './services/userReg.service';
 import { ProductCRUDComponent } from './components/product-crud/product-crud.component';
 import { UserCRUDComponent } from './components/user-crud/user-crud.component';
 import { CartService } from './services/cart.service';
+import {MatBadgeModule} from '@angular/material/badge';
 
 @NgModule({
   declarations: [
@@ -56,12 +58,14 @@ import { CartService } from './services/cart.service';
     FormsModule,
     MatTableModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    MatSidenavModule,
+    MatBadgeModule
 
   ],
-  providers: [UserRegService, CartService],
+  providers: [UserRegService, CartService, CatalogComponent],
   bootstrap: [AppComponent]
 })
-export class AppModule { 
+export class AppModule {
   currentUser: any;
 }

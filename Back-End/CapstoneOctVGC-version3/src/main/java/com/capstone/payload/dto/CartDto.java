@@ -14,4 +14,5 @@ import lombok.Setter;
 public class CartDto {
 	private List<CartItemDto> cartItems;
 	private double totalPrice;
+	private int totalQuantity;
 }

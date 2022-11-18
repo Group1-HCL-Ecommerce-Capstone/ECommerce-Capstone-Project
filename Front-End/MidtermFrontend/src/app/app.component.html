@@ -8,19 +8,27 @@
 
   <button mat-button routerLink="/manage/users" *ngIf="localStore.isAdmin()" routerLinkActive="active"
     ariaCurrentWhenActive="page">Edit Users</button>
-    <button mat-button routerLink="/manage/products" *ngIf="localStore.isAdmin()" routerLinkActive="active"
+
+  <button mat-button routerLink="/manage/products" *ngIf="localStore.isAdmin()" routerLinkActive="active"
     ariaCurrentWhenActive="page">Edit Catalog</button>
 
   <button mat-button routerLink="/profile" *ngIf="localStore.isLoggedIn()" routerLinkActive="active"
     ariaCurrentWhenActive="page">Profile</button>
 
+  <button mat-icon-button *ngIf="localStore.isLoggedIn()" (click)="somethingElse()">
+    <mat-icon matBadge="{{cartService.totalItems}}" matBadgeColor="warn">shopping_cart</mat-icon>
+  </button>
+
   <button *ngIf="!localStore.isLoggedIn()" mat-button routerLink="/login" routerLinkActive="active"
     ariaCurrentWhenActive="page">Login</button>
-  <button *ngIf="localStore.isLoggedIn()" mat-button routerLink="/login" (click)="logout()">Logout</button>
+
+  <button *ngIf="localStore.isLoggedIn()" mat-button routerLink="/home" (click)="logout()">Logout</button>
 
 </mat-toolbar>
 <div class="contentpane">
-  <router-outlet></router-outlet>
+  <router-outlet>
+
+  </router-outlet>
 </div>
 
 </html>

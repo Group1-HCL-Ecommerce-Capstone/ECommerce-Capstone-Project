@@ -26,8 +26,7 @@ export class ProfileComponent implements OnInit {
   }
 
   updateAddress(form: NgForm){
-    form.resetForm();
-    console.log(this.userDetails);
     this.userDetailsService.updateAddress(this.userDetails);
+    form.resetForm();
   }
 }

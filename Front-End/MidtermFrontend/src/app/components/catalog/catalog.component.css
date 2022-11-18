@@ -3,3 +3,7 @@ mat-card {
     height: 100%;
     box-sizing: border-box;
 }
+
+h6 {
+    color: red;
+}

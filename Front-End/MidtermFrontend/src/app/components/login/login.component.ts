@@ -10,16 +10,17 @@ import { FormBuilder, FormControl, FormGroup, NgForm } from '@angular/forms';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  user: User;
-
-  isErr: boolean | undefined;
-  errMessage: string = '';
   constructor(
     private userRegService: UserRegService,
     private router: Router
   ) {
     this.user = new User();
   }
+  user: User;
+
+  isErr: boolean | undefined;
+  errMessage: string = '';
+
 
   ngOnInit(): void {
   }

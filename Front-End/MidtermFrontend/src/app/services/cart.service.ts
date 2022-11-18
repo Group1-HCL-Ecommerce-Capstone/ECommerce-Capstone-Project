@@ -9,6 +9,7 @@ import { LocalService } from './local.service';
 export class CartService {
 
   currentUser: any;
+  totalItems: any;
   responseString: string ='';
   private cartUrl: string;
 
@@ -16,6 +17,11 @@ export class CartService {
     private localStore: LocalService) {
     this.cartUrl = 'http://localhost:8181/cart';
     this.currentUser = this.localStore.getData();
+  }
+
+  getCartInfo(): any{
+    this.http.get<any>(this.cartUrl + '/list/' + this.currentUser.userId).subscribe((response) => {this.totalItems = response.totalQuantity});
+    return this.totalItems;
   }
 
   public addToCart(product: Product, quant: any) {
