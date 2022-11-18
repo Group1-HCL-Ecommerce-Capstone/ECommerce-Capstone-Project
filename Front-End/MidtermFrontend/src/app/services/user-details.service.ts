@@ -18,9 +18,8 @@ export class UserDetailsService {
   }
 
   public addAddress(userDetails: UserDetails) {
-    console.log(userDetails);
     this.http.post<any>(this.addressUrl + '/add/' + this.currentUser.userId, userDetails).subscribe(
-      response => this.currentAddressId = response.id,
+      response => this.currentAddressId = response[0].id,
       error => {
 
       }
@@ -28,9 +27,7 @@ export class UserDetailsService {
   }
 
   public updateAddress(userDetails: UserDetails) {
-    //this.http.get<any>(this.addressUrl + '/all/' + this.currentUser.userId).subscribe(response => this.currentAddressId = response.id);
-    setTimeout(() => {
-      this.http.patch<any>(this.addressUrl + '/update/' + 17, userDetails).subscribe();
-    }, 200)
+    this.http.get<any>(this.addressUrl + '/all/' + this.currentUser.userId).subscribe(response => this.currentAddressId = response[0].id);
+    this.http.patch<any>(this.addressUrl + '/update/' + this.currentAddressId, userDetails).subscribe();
   }
 }
