@@ -12,7 +12,7 @@ import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 export class CatalogComponent implements OnInit {
 
   products: Product[] = [];
-  quantControl = new FormControl(1);
+  quantControl = new FormControl(0);
   quantForm = new FormGroup({
     quant: this.quantControl
   });

@@ -2,7 +2,6 @@ import { enableProdMode, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user';
 import { CurrentUser } from '../models/current-user';
-import { Observable } from 'rxjs';
 import { LocalService } from './local.service';
 import { Router } from '@angular/router';
 
@@ -15,6 +14,7 @@ export class UserRegService {
   currentUser: any;
   err: boolean = false;
   errMessage: string = '';
+  isAdmin: boolean = false;
 
   cUser: CurrentUser = new CurrentUser;
 
@@ -22,7 +22,7 @@ export class UserRegService {
     private http: HttpClient,
     private localStore: LocalService,
     private router: Router
-    ) {
+  ) {
     this.userRegUrl = 'http://localhost:8181/auth';
     this.currentUser = this.localStore.getData();
   }
@@ -39,7 +39,11 @@ export class UserRegService {
   login(user: User) {
     this.http.post<any>(this.userRegUrl + '/login', user).subscribe((response) => {
       this.localStore.saveData(response);
-      this.router.navigate(['home']);
+      setTimeout(() => {
+        this.router.navigate(['home']);
+        console.log(this.currentUser.roles);
+      }, 200);
+
     },
       error => {
         this.err = true;
@@ -47,6 +51,5 @@ export class UserRegService {
       });
 
   }
-
 
 }

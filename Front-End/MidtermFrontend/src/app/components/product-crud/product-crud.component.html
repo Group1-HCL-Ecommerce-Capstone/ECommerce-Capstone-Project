@@ -2,7 +2,7 @@
 
 <br><h1 class="text-center">Product Management</h1>
 <!-- Add a button that allows admin/manager to add products -->
-<button class="btn btn-light float-end" mat-button (click)="addProduct()">Add Product</button><br>
+<a class="btn btn-light float-end" routerLink="/manage/products/add" role="button">Add Product</a><br>
 <table mat-table [dataSource]="products">
     <ng-container matColumnDef="prdId">
         <mat-header-cell *matHeaderCellDef>Product ID</mat-header-cell>
@@ -18,7 +18,7 @@
     </ng-container>
     <ng-container matColumnDef="image">
         <mat-header-cell *matHeaderCellDef>Image</mat-header-cell>
-        <mat-cell *matCellDef="let products"><img src="./assets/productImages/{{products.image}}" alt="{{products.image}}"/></mat-cell>    
+        <mat-cell *matCellDef="let products"><img src="./assets/productImages/{{products.image}}" alt="{{products.image}}" style="width: 50px;height: 60px;"/></mat-cell>    
     </ng-container>
     <ng-container matColumnDef="price">
         <mat-header-cell *matHeaderCellDef>Price</mat-header-cell>
@@ -35,8 +35,8 @@
     <ng-container matColumnDef="acts">
         <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
         <mat-cell *matCellDef ="let products">
-            <button mat-button (click)="editProduct(products)" class="btn btn-info btn-sm">Edit</button> 
-            <button mat-button (click)="deleteProduct(products.id)" class="btn btn-danger btn-sm">Delete</button>
+            <button mat-button (click)="editProduct(products.id)" class="btn btn-info btn-sm">Edit</button> 
+            <button mat-button (click)="deleteProduct(products.id, products.name)" class="btn btn-danger btn-sm">Delete</button>
         </mat-cell>    
     </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

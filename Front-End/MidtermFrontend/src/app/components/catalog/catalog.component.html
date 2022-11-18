@@ -18,19 +18,21 @@
     <mat-grid-tile *ngFor="let product of products">
         <mat-card class="product-card">
 
-            <img mat-card-lg-image src="" alt="product.img_url">
+            <img mat-card-lg-image src="./assets/productImages/{{product.image}}" alt="{{product.image}}">
 
             <mat-card-content>
                 <h3>{{product.name}}</h3>
                 <h5>${{product.price}}</h5>
                 <h5>Current stock: {{product.stock}}</h5>
+                <h6 *ngIf="product.stock < 10 && product.stock > 0">Low Stock</h6>
+                <h6 *ngIf="product.stock == 0">Out of Stock</h6>
                 <p>{{product.description}}</p>
             </mat-card-content>
             <mat-card-actions>
                 <div>
 
                     <form [formGroup]="quantForm">
-                        <mat-form-field>
+                        <mat-form-field class="size">
                             <mat-label>Quantity</mat-label>
                             <input matInput [formControl]="quantControl" type="number" placeholder="1" min="0"
                                 max="{{product.stock}}">
