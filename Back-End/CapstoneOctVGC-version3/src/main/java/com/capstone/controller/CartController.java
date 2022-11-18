@@ -2,7 +2,6 @@ package com.capstone.controller;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,37 +52,19 @@ public class CartController {
 	}
 	
 	// i need to implement something so that when you add the same product it just adds to the quantity
-	//SOLVED
 	@PostMapping("/add/{userId}")
 	public ResponseEntity<Cart> addToCart(@RequestBody AddToCartDto cartAdd, @PathVariable Integer userId){
 		try {
-			Cart newCart = null;
-			Cart selected = null;
-			Optional<Cart> item = cartServ.findCartByUserAndProductId(userId,cartAdd.getProductId());
-			if (item.isPresent()) {
-				selected = item.get();
-				int itemAmt = selected.getQuantity();
-				int cartAmt = cartAdd.getQuantity();
-				int newAmt = itemAmt+cartAmt;
-				System.out.println(newAmt);
-				
-				selected.setQuantity(newAmt);
-				cartServ.save(selected);
-			}else {
-				User user = usrServ.getUserById(userId).get();
-				Product prd = prdServ.findByProductId(cartAdd.getProductId()).get();
-				System.out.println(prd.getName());
-				newCart = cartServ.addProductToCart(cartAdd, prd, user);
-			}
-			if (newCart!=null&&selected==null) {
+			User user = usrServ.getUserById(userId).get();
+			Product prd = prdServ.findByProductId(cartAdd.getProductId()).get();
+			System.out.println(prd.getName());
+			Cart newCart = cartServ.addProductToCart(cartAdd, prd, user);
+			if (newCart!=null) {
 				return new ResponseEntity<>(newCart, HttpStatus.OK);
-			} else if(newCart==null&&selected!=null) {
-				return new ResponseEntity<>(selected, HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 			}
 		} catch (Exception e){
-			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

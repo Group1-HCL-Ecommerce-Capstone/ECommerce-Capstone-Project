@@ -12,6 +12,7 @@ import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 export class CatalogComponent implements OnInit {
 
   products: Product[] = [];
+
   itemsToPrint: any;
   quantControl = new FormControl(1);
   quantForm = new FormGroup({
@@ -35,10 +36,6 @@ export class CatalogComponent implements OnInit {
       console.log(this.itemsToPrint);
     }, 150);
 
-  }
-
-  public addToCart(product: Product){
-    this.cartService.addToCart(product, this.quantControl.value);
   }
 
 }

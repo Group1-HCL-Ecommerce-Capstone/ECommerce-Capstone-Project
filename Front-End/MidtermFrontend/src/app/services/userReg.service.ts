@@ -41,7 +41,6 @@ export class UserRegService {
       this.localStore.saveData(response);
       setTimeout(() => {
         this.router.navigate(['home']);
-        console.log(this.currentUser.roles);
       }, 200);
 
     },

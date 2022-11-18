@@ -8,10 +8,6 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ProductCRUDComponent } from './components/product-crud/product-crud.component';
 import { UserCRUDComponent } from './components/user-crud/user-crud.component';
-import { AddProductComponent } from './components/add-product/add-product.component';
-import { EditProductComponent } from './components/edit-product/edit-product.component';
-import { AddUserComponent } from './components/add-user/add-user.component';
-import { EditUserComponent } from './components/edit-user/edit-user.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -21,11 +17,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
   { path: 'manage/users', component: UserCRUDComponent},
-  { path: 'manage/users/add', component: AddUserComponent},
-  { path: 'manage/users/edit', component: EditUserComponent},
   { path: 'manage/products', component: ProductCRUDComponent},
-  { path: 'manage/products/add', component: AddProductComponent},
-  { path: 'manage/products/edit', component: EditProductComponent},
   { path: '**', component: PageNotFoundComponent},
   
 ];

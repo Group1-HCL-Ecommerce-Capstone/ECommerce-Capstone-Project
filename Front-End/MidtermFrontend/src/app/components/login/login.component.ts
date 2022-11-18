@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit {
     this.user = new User();
   }
   user: User;
+
   isErr: boolean | undefined;
   errMessage: string = '';
 
