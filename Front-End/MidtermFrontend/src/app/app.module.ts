@@ -17,7 +17,6 @@ import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { MatSidenavModule } from '@angular/material/sidenav';
 
 import { HomeComponent } from './components/home/home.component';
 import { CatalogComponent } from './components/catalog/catalog.component';
@@ -28,7 +27,6 @@ import { UserRegService } from './services/userReg.service';
 import { ProductCRUDComponent } from './components/product-crud/product-crud.component';
 import { UserCRUDComponent } from './components/user-crud/user-crud.component';
 import { CartService } from './services/cart.service';
-import {MatBadgeModule} from '@angular/material/badge';
 import { EditProductComponent } from './components/edit-product/edit-product.component';
 import { AddProductComponent } from './components/add-product/add-product.component';
 import { AddUserComponent } from './components/add-user/add-user.component';
@@ -66,14 +64,12 @@ import { EditUserComponent } from './components/edit-user/edit-user.component';
     FormsModule,
     MatTableModule,
     ReactiveFormsModule,
-    MatInputModule,
-    MatSidenavModule,
-    MatBadgeModule
+    MatInputModule
 
   ],
-  providers: [UserRegService, CartService, CatalogComponent],
+  providers: [UserRegService, CartService],
   bootstrap: [AppComponent]
 })
-export class AppModule {
+export class AppModule { 
   currentUser: any;
 }
