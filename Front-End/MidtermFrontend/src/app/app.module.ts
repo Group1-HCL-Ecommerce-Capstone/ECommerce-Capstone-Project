@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
@@ -29,6 +29,10 @@ import { ProductCRUDComponent } from './components/product-crud/product-crud.com
 import { UserCRUDComponent } from './components/user-crud/user-crud.component';
 import { CartService } from './services/cart.service';
 import {MatBadgeModule} from '@angular/material/badge';
+import { EditProductComponent } from './components/edit-product/edit-product.component';
+import { AddProductComponent } from './components/add-product/add-product.component';
+import { AddUserComponent } from './components/add-user/add-user.component';
+import { EditUserComponent } from './components/edit-user/edit-user.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +43,11 @@ import {MatBadgeModule} from '@angular/material/badge';
     LoginComponent,
     RegisterComponent,
     ProductCRUDComponent,
-    UserCRUDComponent
+    UserCRUDComponent,
+    EditProductComponent,
+    AddProductComponent,
+    AddUserComponent,
+    EditUserComponent
 
   ],
   imports: [

@@ -31,8 +31,8 @@ export class AppComponent {
   logout() {
     this.localStore.clearData();
     location.reload();
+    
   }
-
   somethingElse() {
    console.log('Do Stuff');
   }
@@ -40,3 +40,4 @@ export class AppComponent {
 
 
 }
+

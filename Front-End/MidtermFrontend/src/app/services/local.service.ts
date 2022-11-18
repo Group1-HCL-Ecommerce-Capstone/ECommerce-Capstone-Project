@@ -33,7 +33,6 @@ export class LocalService {
         this.admin =true;
       }
     }
-    
     isAdmin(){
       return this.admin;
     }

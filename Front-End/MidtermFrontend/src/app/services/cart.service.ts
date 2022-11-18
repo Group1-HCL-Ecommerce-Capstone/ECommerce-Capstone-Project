@@ -23,7 +23,6 @@ export class CartService {
     this.http.get<any>(this.cartUrl + '/list/' + this.currentUser.userId).subscribe((response) => {this.totalItems = response.totalQuantity});
     return this.totalItems;
   }
-
   public addToCart(product: Product, quant: any) {
     this.responseString = '{"productId": '+ product.id +',"quantity": '+quant+'}';
     this.http.post<any>(this.cartUrl + '/add/' + this.currentUser.userId, JSON.parse(this.responseString)).subscribe();
