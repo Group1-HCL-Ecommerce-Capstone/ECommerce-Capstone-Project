@@ -12,7 +12,8 @@ import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 export class CatalogComponent implements OnInit {
 
   products: Product[] = [];
-  quantControl = new FormControl(0);
+  itemsToPrint: any;
+  quantControl = new FormControl(1);
   quantForm = new FormGroup({
     quant: this.quantControl
   });
@@ -23,6 +24,17 @@ export class CatalogComponent implements OnInit {
     this.productsService.findAll().subscribe(data => {
       this.products = data;
     });
+   
+  }
+
+  public addToCart(product: Product) {
+    this.cartService.addToCart(product, this.quantControl.value);
+    this.cartService.getCartInfo();
+    setTimeout(() => {
+      this.itemsToPrint = this.cartService.totalItems;
+      console.log(this.itemsToPrint);
+    }, 150);
+
   }
 
   public addToCart(product: Product){

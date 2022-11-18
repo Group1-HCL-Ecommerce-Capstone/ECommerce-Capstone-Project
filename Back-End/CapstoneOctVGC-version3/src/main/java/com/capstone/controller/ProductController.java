@@ -63,7 +63,7 @@ public class ProductController {
 	}
 
 	@PostMapping("/add")
-	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
 	public ResponseEntity<Product> registerProduct(@RequestBody ProductRequest prdReq) {
 		try {
 			Product registeredProduct = new Product(prdReq.getName(), prdReq.getDescription(), prdReq.getImage(),

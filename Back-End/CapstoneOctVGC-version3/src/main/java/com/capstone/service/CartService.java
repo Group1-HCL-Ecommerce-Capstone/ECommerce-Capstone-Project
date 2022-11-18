@@ -53,9 +53,9 @@ public class CartService {
 		}
 		int totalQuantity = 0;
 		for (CartItemDto req:cartItems) {
-			totalQuantity += (req.getQuantity());
+			totalQuantity += req.getQuantity();
 		}
-		CartDto cartWithCost = new CartDto(cartItems,totalQuantity, totalCost);
+		CartDto cartWithCost = new CartDto(cartItems, totalCost, totalQuantity);
 		return cartWithCost;
 	}
 	
