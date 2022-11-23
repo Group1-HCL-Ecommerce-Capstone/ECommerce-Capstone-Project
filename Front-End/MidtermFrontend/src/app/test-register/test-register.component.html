@@ -1,0 +1,22 @@
+<h3 class="text-center">User Details</h3>
+<hr>
+<form [formGroup]="form" (ngSubmit)="onSubmit($event)">
+    <div>
+        <label for="email">First Name</label>
+        <input type="firstName" id="firstName" formControlName="firstName" [ngClass]="{'form-submitted': formSubmitted}"
+            placeholder="Enter first name" />
+    </div>
+    <div>
+        <label for="institution">Last Name </label>
+        <input type="text" id="lastName" formControlName="lastName" [ngClass]="{'form-submitted': formSubmitted}" placeholder="Enter last Name" />
+    </div>
+    <div>
+        <label for="company">email</label>
+        <input type="text" id="email" formControlName="email" [ngClass]="{'form-submitted': formSubmitted}" placeholder="Enter email" />
+    </div>
+    <div>
+        <label for="salary">password</label>
+        <input type="password" id="password" formControlName="password" [ngClass]="{'form-submitted': formSubmitted}" placeholder="Enter password" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

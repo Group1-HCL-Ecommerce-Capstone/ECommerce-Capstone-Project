@@ -3,7 +3,7 @@
     <div class="container">
         <div class="col-sm-6 offset-md-3">
             <h1>Registration</h1>
-            <form (ngSubmit)="onSubmit(userForm)" #userForm="ngForm">
+            <form (ngSubmit)="onSubmit(userForm, $event)" #userForm="ngForm">
                 <div class="row" *ngIf="successMsg">
                     <div class="col-xs-12">
                         <p class="alert alert-success">
@@ -22,32 +22,33 @@
                     <label class="control-label" for="firstName">
                         First Name
                     </label>
-                    <input id="firstName" name="firstName" [(ngModel)]="user.firstName" class="form-control" required
-                        firstName="ngModel" />
+                    <input id="firstName" name="firstName" [ngClass]="{'form-submitted': formSubmitted}"
+                        [(ngModel)]="user.firstName" class="form-control" placeholder="Enter first name" required firstName="ngModel" />
                 </div>
 
                 <div class="form-group">
                     <label class="control-label" for="lastName">
                         Last Name
                     </label>
-                    <input id="lastName" name="lastName" [(ngModel)]="user.lastName" class="form-control" required
-                        lastName="ngModel" />
+                    <input id="lastName" name="lastName" [ngClass]="{'form-submitted': formSubmitted}"
+                        [(ngModel)]="user.lastName" class="form-control"  placeholder="Enter last name" required lastName="ngModel" />
                 </div>
 
                 <div class="form-group">
                     <label class="control-label" for="email">
                         Email
                     </label>
-                    <input id="email" name="email" [(ngModel)]="user.email" class="form-control" required
-                        email="ngModel" />
+                    <input id="email" name="email" [ngClass]="{'form-submitted': formSubmitted}"
+                        [(ngModel)]="user.email" class="form-control" placeholder="Enter email" required email="ngModel" />
                 </div>
 
                 <div class="form-group">
                     <label class="control-label" for="password">
                         Password
                     </label>
-                    <input id="password" name="password" [(ngModel)]="user.password" class="form-control" type="password" required 
-                     password="ngModel" />
+                    <input id="password" name="password" [ngClass]="{'form-submitted': formSubmitted}"
+                        [(ngModel)]="user.password" class="form-control"  placeholder="Enter password" type="password" required password="ngModel"
+                        minlength="8" />
                 </div>
 
                 <div class="form-group">

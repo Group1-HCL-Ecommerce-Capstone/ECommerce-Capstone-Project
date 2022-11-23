@@ -29,6 +29,7 @@ import { ProductCRUDComponent } from './components/product-crud/product-crud.com
 import { UserCRUDComponent } from './components/user-crud/user-crud.component';
 import { CartService } from './services/cart.service';
 import {MatBadgeModule} from '@angular/material/badge';
+import { TestRegisterComponent } from './test-register/test-register.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import {MatBadgeModule} from '@angular/material/badge';
     LoginComponent,
     RegisterComponent,
     ProductCRUDComponent,
-    UserCRUDComponent
+    UserCRUDComponent,
+    TestRegisterComponent
 
   ],
   imports: [
