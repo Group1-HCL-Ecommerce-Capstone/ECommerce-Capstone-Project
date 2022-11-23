@@ -33,7 +33,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.capstone.security.AuthEntryPointJwt;
-import com.capstone.security.AuthTokenFilter;
 import com.capstone.service.UserDetailsServiceImpl;
 
 import antlr.StringUtils;
@@ -47,12 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
-	
-	@Bean
-	public AuthTokenFilter authenticationJwtTokenFilter() {
-		return new AuthTokenFilter();
-	}
-	
+		
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -81,7 +75,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/orders/**").permitAll()
 			.antMatchers("/swagger-ui.html","/v2/api-docs","/swagger*/**","/configuration/**","/webjars/**","swagger-resources","swagger-resources/configuration/security").permitAll()
 			.anyRequest().authenticated();
-		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	@Bean

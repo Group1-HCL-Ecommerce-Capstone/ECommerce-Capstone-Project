@@ -85,7 +85,6 @@
    			 <artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 		
-				
 		<!-- Okta Dependency -->
 		<dependency>
    			 <groupId>com.okta.spring</groupId>
