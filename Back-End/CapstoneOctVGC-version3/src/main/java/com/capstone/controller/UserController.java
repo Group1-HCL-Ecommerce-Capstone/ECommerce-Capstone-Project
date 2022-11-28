@@ -146,6 +146,7 @@ public class UserController {
 			//this is not doing what i want, non null will take the roles available and change it
 			//to what i input, so if i dont input anything the roles are removed
 			//SOLVED
+			System.out.println(usr.getRole());
 			if(Objects.nonNull((usr.getRole()))){
 				Set<String> rolesString = usr.getRole();
 				Set<Role> roles = new HashSet<>();

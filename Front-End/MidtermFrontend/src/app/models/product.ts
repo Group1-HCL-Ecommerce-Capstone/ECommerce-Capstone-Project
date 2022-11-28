@@ -1,3 +1,5 @@
+import { Category } from "./category";
+
 export class Product {
     id: number = 0;
     name: string = "";
@@ -6,5 +8,5 @@ export class Product {
     price: string = "";
     stock: number = 0;
     available: boolean = false;
-    categories: string[] = [];
+    categories: any;
 }

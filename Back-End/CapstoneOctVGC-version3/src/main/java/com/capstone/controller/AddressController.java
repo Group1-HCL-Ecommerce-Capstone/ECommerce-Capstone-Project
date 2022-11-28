@@ -3,6 +3,7 @@ package com.capstone.controller;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capstone.model.Address;
+import com.capstone.model.Order;
 import com.capstone.model.User;
 import com.capstone.payload.dto.AddressDto;
 import com.capstone.service.AddressService;
@@ -88,6 +90,16 @@ public class AddressController {
 			return new ResponseEntity<>(adrService.save(databaseAdr), HttpStatus.OK);
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/find/{adrId}")
+	public ResponseEntity<Optional<Address>> findAddressById(@PathVariable Integer adrId){
+		try {
+			Optional<Address> address = adrService.findByAddressId(adrId);
+			return new ResponseEntity<>(address, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

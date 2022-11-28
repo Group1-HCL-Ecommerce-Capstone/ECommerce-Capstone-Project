@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormsModule } from '@angular/forms';
 import { EditProductComponent } from './edit-product.component';
 
 describe('EditProductComponent', () => {
@@ -8,6 +8,7 @@ describe('EditProductComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports:[ FormsModule ],
       declarations: [ EditProductComponent ]
     })
     .compileComponents();

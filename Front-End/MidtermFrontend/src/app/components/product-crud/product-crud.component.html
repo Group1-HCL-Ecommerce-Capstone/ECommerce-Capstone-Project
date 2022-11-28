@@ -1,9 +1,41 @@
 <html>
 
-<br><h1 class="text-center">Product Management</h1>
+<br>
+<h1 class="text-center">Product Management</h1>
 <!-- Add a button that allows admin/manager to add products -->
 <a class="btn btn-light float-end" routerLink="/manage/products/add" role="button">Add Product</a><br>
-<table mat-table [dataSource]="products">
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Product Id</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <!--<th>Categories</th>-->
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let prd of products">
+            <td>{{prd.id}}</td>
+            <td>{{prd.name}}</td>
+            <td>{{prd.description}}</td>
+            <td><img src="./assets/productImages/{{prd.image}}" alt="{{prd.image}}"
+                    style="width: 50px;height: 60px;" /></td>
+            <td>${{prd.price}}</td>
+            <td>{{prd.stock}}</td>
+            <!--<td><div *ngFor="let categ of prd.categories">{{categ.categoryName}}</div></td>-->
+            <td> <button mat-button (click)="editProduct(prd.id)" class="btn btn-info btn-sm">Edit</button>&nbsp;
+                <button mat-button (click)="deleteProduct(prd.id, prd.name)"
+                    class="btn btn-danger btn-sm">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<!--<table mat-table [dataSource]="products">
     <ng-container matColumnDef="prdId">
         <mat-header-cell *matHeaderCellDef>Product ID</mat-header-cell>
         <mat-cell *matCellDef="let products">{{products.id}}</mat-cell>   
@@ -28,10 +60,10 @@
         <mat-header-cell *matHeaderCellDef>Stock</mat-header-cell>
         <mat-cell *matCellDef="let products">{{products.stock}}</mat-cell>    
     </ng-container>
-    <!--<ng-container matColumnDef="categ">
+    <ng-container matColumnDef="categ">
         <mat-header-cell *matHeaderCellDef>Categories</mat-header-cell>
         <mat-cell *matCellDef="let products">{{products.categories}}</mat-cell>    
-    </ng-container>-->
+    </ng-container>
     <ng-container matColumnDef="acts">
         <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
         <mat-cell *matCellDef ="let products">
@@ -41,10 +73,6 @@
     </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    <!--<tr >
-        <p>products</p>{{product.name}} {{product.cost}} {{product.description}}
-    </tr>
-    <p>help</p>-->
-</table>
+</table>-->
 
 </html>

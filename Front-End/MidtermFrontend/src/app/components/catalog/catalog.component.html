@@ -34,10 +34,10 @@
                     <form [formGroup]="quantForm">
                         <mat-form-field class="size">
                             <mat-label>Quantity</mat-label>
-                            <input matInput [formControl]="quantControl" type="number" placeholder="1" min="0"
+                            <input matInput [formControl]="quantControl" type="number" min="1"
                                 max="{{product.stock}}">
                         </mat-form-field>
-                        <button mat-button (click)="addToCart(product)">Add to Cart</button>
+                        <button mat-button (click)="addToCart(product)"><mat-icon>add_shopping_cart</mat-icon>Add to Cart</button>
                     </form>
                 </div>
 

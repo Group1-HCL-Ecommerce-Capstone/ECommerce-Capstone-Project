@@ -24,19 +24,25 @@ export class ProductService {
     this.currentUser = localStorage.getData();
   }
   
-  public findAll(): Observable<Product[]>{
-    return this.http.get<Product[]>(this.productsUrl + '/all');
-  }
-
-  public addProduct(product: Product){
+  public addHeaders(){
+    console.log(this.currentUser);
     let jwt = this.currentUser.token;
+    console.log(jwt);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${jwt}`
       })
     }
-    this.http.post<any>(this.productsUrl + "/add", product, httpOptions).subscribe((response) => {
+    return httpOptions;
+  }
+
+  public findAll(): Observable<any[]>{
+    return this.http.get<any[]>(this.productsUrl + '/all');
+  }
+
+  public addProduct(product: Product){
+    this.http.post<any>(this.productsUrl + "/add", product, this.addHeaders()).subscribe((response) => {
       console.log(response);
       this.isAdded = true;
     },
@@ -47,15 +53,7 @@ export class ProductService {
   }
 
   public editProduct(prdId: number, product: Product){
-    let jwt = this.currentUser.token;
-    console.log(jwt);
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
-      })
-    }
-    this.http.patch<any>(this.productsUrl+'/update/'+prdId, product, httpOptions).subscribe((response) => {
+    this.http.patch<any>(this.productsUrl+'/update/'+prdId, product, this.addHeaders()).subscribe((response) => {
       console.log(response);
       this.isEdited = true;
     },
@@ -70,14 +68,7 @@ export class ProductService {
   }
 
   public deleteProduct(id: number){
-    let jwt = this.currentUser.token;
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
-      })
-    }
-    return this.http.delete(this.productsUrl+'/delete/'+id, httpOptions);
+    return this.http.delete(this.productsUrl+'/delete/'+id, this.addHeaders());
   }
 
   public select(prdId: number){

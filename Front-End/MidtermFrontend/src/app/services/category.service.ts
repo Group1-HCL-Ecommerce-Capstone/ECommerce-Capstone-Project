@@ -9,6 +9,12 @@ export class CategoryService {
   private categoryUrl: string;
 
   constructor(private http: HttpClient) { 
-    this.categoryUrl = 'http://localhost:8181/'
+    this.categoryUrl = 'http://localhost:8181/categories'
   }
+
+  public findCategsUnderProduct(prdId: number){
+    return this.http.get<any>(this.categoryUrl+"/product_categories/"+prdId);
+  }
+
+
 }

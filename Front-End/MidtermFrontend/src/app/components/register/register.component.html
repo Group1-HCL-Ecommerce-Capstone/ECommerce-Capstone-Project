@@ -23,7 +23,10 @@
                         First Name
                     </label>
                     <input id="firstName" name="firstName" [(ngModel)]="user.firstName" class="form-control" required
-                        firstName="ngModel" />
+                        #firstName="ngModel" />
+                        <div *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)" class="msg">
+                            <div *ngIf="firstName.errors?.['required']">First Name is required</div>
+                        </div>
                 </div>
 
                 <div class="form-group">
@@ -31,7 +34,10 @@
                         Last Name
                     </label>
                     <input id="lastName" name="lastName" [(ngModel)]="user.lastName" class="form-control" required
-                        lastName="ngModel" />
+                        #lastName="ngModel" />
+                        <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="msg">
+                            <div *ngIf="lastName.errors?.['required']">Last Name is required</div>
+                        </div>
                 </div>
 
                 <div class="form-group">
@@ -39,7 +45,11 @@
                         Email
                     </label>
                     <input id="email" name="email" [(ngModel)]="user.email" class="form-control" required
-                        email="ngModel" />
+                        email #email="ngModel" />
+                        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="msg">
+                            <div *ngIf="email.errors?.['required']">Email is required</div>
+                            <div *ngIf="email.errors?.['email']">Email is invalid</div>
+                        </div>
                 </div>
 
                 <div class="form-group">
@@ -47,11 +57,15 @@
                         Password
                     </label>
                     <input id="password" name="password" [(ngModel)]="user.password" class="form-control" type="password" required 
-                     password="ngModel" />
+                     minlength="6" #password="ngModel" />
+                     <div *ngIf="password.invalid && (password.dirty || password.touched)" class="msg">
+                        <div *ngIf="password.errors?.['required']">Password is required</div>
+                        <div *ngIf="password.errors?.['minlength']">Password must be at least 6 characters</div>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-info">Register</button>
+                    <button type="submit" class="btn btn-info" [disabled]="!userForm.valid">Register</button>
                     <span>Already registered? <a href="/login">Login here</a></span>
                 </div>
             </form>

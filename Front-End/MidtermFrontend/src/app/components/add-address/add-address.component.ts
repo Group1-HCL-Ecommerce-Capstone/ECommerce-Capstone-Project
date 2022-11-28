@@ -4,13 +4,13 @@ import { UserDetails } from 'src/app/models/user-details';
 import { UserDetailsService } from 'src/app/services/user-details.service';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  selector: 'app-add-address',
+  templateUrl: './add-address.component.html',
+  styleUrls: ['./add-address.component.css']
 })
-export class ProfileComponent implements OnInit {
-
+export class AddAddressComponent implements OnInit {
   userDetails: UserDetails;
+  isAdded: boolean | undefined;
   constructor(
     private userDetailsService: UserDetailsService
   ) {
@@ -22,7 +22,12 @@ export class ProfileComponent implements OnInit {
 
   onSubmit(form: NgForm){
     this.userDetailsService.addAddress(this.userDetails);
-    form.resetForm();
+    setTimeout(()=>{
+      this.isAdded = this.userDetailsService.isAdded;
+      console.log(this.isAdded);
+      form.resetForm();
+    },200);
+    
   }
 
   updateAddress(form: NgForm){

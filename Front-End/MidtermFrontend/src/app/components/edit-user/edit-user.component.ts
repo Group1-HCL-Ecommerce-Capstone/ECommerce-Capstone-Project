@@ -12,6 +12,11 @@ export class EditUserComponent implements OnInit {
   oneUser: User = new User;
   id: number=0;
   isEdited: boolean | undefined;
+  isAdmin: boolean | undefined;
+  isAdminChanged: boolean | undefined;
+  roles:any;
+  yes: any;
+  adminRole:string='';
 
   constructor(
     private usersService: UserCrudService){
@@ -21,10 +26,45 @@ export class EditUserComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.usersService.id;
     this.oneUser = this.usersService.oneUser;
+    this.checkIfAdmin(this.oneUser);
     setTimeout(()=>{
-      console.log(this.oneUser)
+      console.log(this.oneUser.roles)
+      console.log(this.isAdmin)
     },200)
     
+  }
+
+  checkIfAdmin(user: User){
+    //console.log(user.roles.values());
+    user.roles.forEach((r: any) => {
+      console.log(r.roleType)
+      if (r.roleType === 'ROLE_ADMIN'){
+        this.yes = true;
+      }
+    })
+    if(this.yes){
+      this.isAdmin = true;
+    } else{
+      this.isAdmin = false;
+    }
+  }
+
+  changeRole(id: number){
+    if (this.isAdmin){
+      this.adminRole = '{"role":["admin","user"]}'
+      this.usersService.editUser(id,JSON.parse(this.adminRole));
+      setTimeout(()=>{
+        this.isAdminChanged = this.usersService.isEdited;
+        console.log(this.isAdminChanged);
+      }, 200);
+    } else{
+      this.adminRole = '{"role":["user"]}'
+      this.usersService.editUser(id,JSON.parse(this.adminRole));
+      setTimeout(()=>{
+        this.isAdminChanged = this.usersService.isEdited;
+        console.log(this.isAdminChanged);
+      }, 200);
+    }
   }
 
   onSubmit(value: any){

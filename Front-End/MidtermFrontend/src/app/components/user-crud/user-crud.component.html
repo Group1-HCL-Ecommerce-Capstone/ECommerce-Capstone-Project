@@ -1,9 +1,34 @@
 <html>
 
 <br><h1 class="text-center">User Management</h1>
-<!-- Add a button that allows admin/manager to add users -->
 <a class="btn btn-light float-end" routerLink="/manage/users/add" role="button">Add User</a><br>
-<table mat-table [dataSource]="users">
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>User Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let user of users">
+            <td>{{user.userId}}</td>
+            <td>{{user.firstName}}</td>
+            <td>{{user.lastName}}</td>
+            <td>{{user.email}}</td>
+            <td><div *ngFor="let role of user.roles">{{role.roleType}}</div></td>
+            <!--<td><div *ngFor="let categ of categories">{{categ.categoryName}}</div></td>-->
+            <td> <button mat-button (click)="editUser(user.userId)" class="btn btn-info btn-sm">Edit</button>&nbsp;
+                <button mat-button (click)="deleteUser(user.userId, user.firstName, user.lastName)"
+                    class="btn btn-danger btn-sm">Delete</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<!--<table mat-table [dataSource]="users">
     <ng-container matColumnDef="userId">
         <mat-header-cell *matHeaderCellDef>User Id</mat-header-cell>
         <mat-cell *matCellDef="let users">{{users.userId}}</mat-cell>    
@@ -33,6 +58,6 @@
     </ng-container>
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-</table>
+</table>-->
 
 </html>

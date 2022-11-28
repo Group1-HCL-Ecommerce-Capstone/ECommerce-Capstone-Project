@@ -2,6 +2,7 @@ import { Component, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { Category } from 'src/app/models/category';
 import { Product } from 'src/app/models/product';
+import { CategoryService } from 'src/app/services/category.service';
 import { ProductService } from 'src/app/services/product.service';
 import { EditProductComponent } from '../edit-product/edit-product.component';
 
@@ -12,19 +13,26 @@ import { EditProductComponent } from '../edit-product/edit-product.component';
 })
 export class ProductCRUDComponent implements OnInit {
 
+  categories: Category[] = [];
   products: Product[] = [];
   oneProduct: Product = new Product;
   id: number = 0;
   //categories: Category[] = []
-  displayedColumns: string[] = ["prdId", "name", "desc", "image", "price", "stock", "acts"]; //"categ",
+  displayedColumns: string[] = ["prdId", "name", "desc", "image", "price", "stock", "categ", "acts"]; //"categ",
   constructor(
     private productsService: ProductService,
-    private router: Router) { }
+    private router: Router,
+    private categService: CategoryService) { }
 
   ngOnInit() {
     this.productsService.findAll().subscribe(data => {
       this.products = data;
-    });
+      this.categories = data.map(d=>d.categories)
+      console.log(this.products);
+      console.log(this.products[0].name);
+      console.log(this.categories);
+      //console.log(this.products[0].categories[0].name)
+    });       
   }
 
   public addProduct() {

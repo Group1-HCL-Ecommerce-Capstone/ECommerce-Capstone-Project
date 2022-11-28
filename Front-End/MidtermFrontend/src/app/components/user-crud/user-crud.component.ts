@@ -13,7 +13,7 @@ export class UserCRUDComponent implements OnInit {
   oneUser: User = new User;
   id: number = 0;
   //categories: Category[] = []
-  displayedColumns: string[] = ["userId", "first", "last", "email", "roles", "acts"]; //"categ",
+  displayedColumns: string[] = ["userId", "first", "last", "email", "acts"]; //"roles", 
   constructor(
     private usersService: UserCrudService,
     private router: Router) { }
@@ -21,6 +21,7 @@ export class UserCRUDComponent implements OnInit {
   ngOnInit() {
     this.usersService.findAll().subscribe(data => {
       this.users = data;
+      console.log(this.users[2].roles)
     });
   }
 
@@ -40,8 +41,8 @@ export class UserCRUDComponent implements OnInit {
     },200)
   }
 
-  public deleteUser(id: number, name: string) {
-    if(confirm(`Are you sure you want to delete User ${id}: ${name}?`)){
+  public deleteUser(id: number, fName: string, lName: string) {
+    if(confirm(`Are you sure you want to delete User ${id}: ${fName} ${lName}?`)){
       this.usersService.deleteUser
   (id)
       .subscribe(data => {

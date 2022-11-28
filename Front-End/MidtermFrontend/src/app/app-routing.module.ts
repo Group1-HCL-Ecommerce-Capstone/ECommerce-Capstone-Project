@@ -12,12 +12,18 @@ import { AddProductComponent } from './components/add-product/add-product.compon
 import { EditProductComponent } from './components/edit-product/edit-product.component';
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
+import { AddAddressComponent } from './components/add-address/add-address.component';
+import { EditAddressComponent } from './components/edit-address/edit-address.component';
+import { AddressCrudComponent } from './components/address-crud/address-crud.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full'},
   { path: 'home', component: HomeComponent},
   { path: 'catalog', component: CatalogComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'profile/list', component: AddressCrudComponent },
+  { path: 'profile/add', component: AddAddressComponent },
+  { path: 'profile/edit', component: EditAddressComponent },
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent},
   { path: 'manage/users', component: UserCRUDComponent},
