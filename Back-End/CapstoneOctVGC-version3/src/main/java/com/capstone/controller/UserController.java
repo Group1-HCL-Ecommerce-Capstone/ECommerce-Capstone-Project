@@ -185,7 +185,7 @@ public class UserController {
 	//this is not working for some reason, returning not found although id is in database
 	// SOLVED, i had an extra parenthesis in the url pattern
 	@DeleteMapping("/remove/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<HttpStatus> deleteUserById(@PathVariable Integer id){
 		try {
 			User usr = usrService.getUserById(id)
