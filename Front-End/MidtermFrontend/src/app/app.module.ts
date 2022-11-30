@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -37,6 +37,18 @@ import { EditProductComponent } from './components/edit-product/edit-product.com
 import { AddAddressComponent } from './components/add-address/add-address.component';
 import { EditAddressComponent } from './components/edit-address/edit-address.component';
 import { AddressCrudComponent } from './components/address-crud/address-crud.component';
+//import { OktaConfigComponent } from './config/okta-config/okta-config.component';
+import { OktaAuthModule, OKTA_CONFIG } from '@okta/okta-angular';
+import { OktaAuth } from '@okta/okta-auth-js';
+
+const oktaAuth = new OktaAuth({
+  //client id given by okta
+  clientId: '0oa7fxszif3FkGsQM5d7',
+  //okta domain, if not given in application it is in your okta url
+  issuer: 'https://dev-84185932.okta.com/oauth2/default',
+  redirectUri: 'http://localhost:4200/login/callback',
+  scopes: ['openid', 'profile', 'email', 'address']
+})
 
 @NgModule({
   declarations: [
@@ -54,7 +66,7 @@ import { AddressCrudComponent } from './components/address-crud/address-crud.com
     EditProductComponent,
     AddAddressComponent,
     EditAddressComponent,
-    AddressCrudComponent 
+    AddressCrudComponent
   ],
   imports: [
     BrowserModule,
@@ -75,10 +87,11 @@ import { AddressCrudComponent } from './components/address-crud/address-crud.com
     MatBadgeModule,
     FormsModule,
     ReactiveFormsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    OktaAuthModule
 
   ],
-  providers: [UserRegService, CartService, CatalogComponent],
+  providers: [UserRegService, CartService, CatalogComponent, {provide: OKTA_CONFIG, useValue: { oktaAuth }}],
   bootstrap: [AppComponent]
 })
 export class AppModule { 

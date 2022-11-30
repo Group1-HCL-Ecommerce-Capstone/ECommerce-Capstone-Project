@@ -1,6 +1,10 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input, Inject} from '@angular/core';
 import { LocalService } from 'src/app/services/local.service';
 import { Injectable } from '@angular/core';
+import { filter, map, Observable } from 'rxjs';
+import { OktaAuthStateService, OKTA_AUTH } from '@okta/okta-angular';
+import { OktaAuth, AuthState } from '@okta/okta-auth-js';
+//import { OktaAuthService } from '@okta/okta-angular';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +16,22 @@ import { Injectable } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
+  user: any;
+  public name$!: Observable<string>;
+
+  constructor(
+    private _oktaAuthStateService: OktaAuthStateService,
+    @Inject(OKTA_AUTH) private _auth: OktaAuth) { }
+
+  async ngOnInit() {
+    this.name$ = this._oktaAuthStateService.authState$.pipe(
+      filter((authState: AuthState) => !!authState&& !!authState.isAuthenticated),
+      map((authState: AuthState) => authState.idToken?.claims.name ?? '')
+    );
+    const userClaims = await this._auth.getUser();
+    console.log(userClaims.address);
+  }
+  /*
   currentUser:any;
   
   constructor(private localStore: LocalService) {
@@ -20,5 +40,5 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+*/
 }
