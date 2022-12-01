@@ -25,6 +25,7 @@ import com.capstone.payload.dto.AddToCartDto;
 import com.capstone.payload.dto.CartDto;
 import com.capstone.payload.dto.CartItemDto;
 import com.capstone.repository.CartRepository;
+import com.capstone.repository.UserRepository;
 import com.capstone.service.CartService;
 import com.capstone.service.ProductService;
 import com.capstone.service.UserService;
@@ -42,10 +43,13 @@ public class CartController {
 	@Autowired
 	UserService usrServ;
 	
-	@GetMapping("/list/{userId}")
-	public ResponseEntity<CartDto> showCart(@PathVariable Integer userId) {
+	@Autowired
+	UserRepository userRepo;
+	
+	@GetMapping("/list/{email}")
+	public ResponseEntity<CartDto> showCart(@PathVariable String email) {
 		try {
-			CartDto currentCart = cartServ.listCartItems(userId);
+			CartDto currentCart = cartServ.listCartItems(email);
 			return new ResponseEntity<>(currentCart, HttpStatus.OK);
 		} catch (Exception e){
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -54,12 +58,12 @@ public class CartController {
 	
 	// i need to implement something so that when you add the same product it just adds to the quantity
 	//SOLVED
-	@PostMapping("/add/{userId}")
-	public ResponseEntity<Cart> addToCart(@RequestBody AddToCartDto cartAdd, @PathVariable Integer userId){
+	@PostMapping("/add/{email}")
+	public ResponseEntity<Cart> addToCart(@RequestBody AddToCartDto cartAdd, @PathVariable String email){
 		try {
 			Cart newCart = null;
 			Cart selected = null;
-			Optional<Cart> item = cartServ.findCartByUserAndProductId(userId,cartAdd.getProductId());
+			Optional<Cart> item = cartServ.findCartByUserAndProductId(email,cartAdd.getProductId());
 			if (item.isPresent()) {
 				selected = item.get();
 				int itemAmt = selected.getQuantity();
@@ -70,10 +74,19 @@ public class CartController {
 				selected.setQuantity(newAmt);
 				cartServ.save(selected);
 			}else {
-				User user = usrServ.getUserById(userId).get();
-				Product prd = prdServ.findByProductId(cartAdd.getProductId()).get();
-				System.out.println(prd.getName());
-				newCart = cartServ.addProductToCart(cartAdd, prd, user);
+				boolean emailExists = userRepo.existsByEmail(email);
+				if (emailExists) {
+					User user = userRepo.findByEmail(email).get();
+					Product prd = prdServ.findByProductId(cartAdd.getProductId()).get();
+					System.out.println(prd.getName());
+					newCart = cartServ.addProductToCart(cartAdd, prd, user);
+				}else {
+					User newCustomer = new User();
+					newCustomer.setEmail(email);
+					usrServ.save(newCustomer);
+					Product prd = prdServ.findByProductId(cartAdd.getProductId()).get();
+					newCart = cartServ.addProductToCart(cartAdd, prd, newCustomer);
+				}
 			}
 			if (newCart!=null&&selected==null) {
 				return new ResponseEntity<>(newCart, HttpStatus.OK);
@@ -91,10 +104,10 @@ public class CartController {
 	
 	//not working, need to change something in the service i believe
 	// SOLVED
-	@PutMapping("/update/{userId}")
-	public ResponseEntity<Cart> updateCartItem(@RequestBody AddToCartDto cartAdd, @PathVariable Integer userId){
+	@PutMapping("/update/{email}")
+	public ResponseEntity<Cart> updateCartItem(@RequestBody AddToCartDto cartAdd, @PathVariable String email){
 		try {
-			Cart item = cartServ.findCartByUserAndProductId(userId, cartAdd.getProductId()).get();
+			Cart item = cartServ.findCartByUserAndProductId(email, cartAdd.getProductId()).get();
 			
 			//System.out.println(item.getProduct().getName());
 			//System.out.println("quantity update: " + item.getQuantity());

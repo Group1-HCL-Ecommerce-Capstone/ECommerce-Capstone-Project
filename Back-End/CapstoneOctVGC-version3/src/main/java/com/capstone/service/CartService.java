@@ -24,11 +24,24 @@ public class CartService {
 	@Autowired
 	CartRepository cartRepo;
 	
+	@Autowired
+	UserService userServ;
+	
 	public Cart save(Cart crt) {
 		return cartRepo.save(crt);
 	}
 	
 	public Cart addProductToCart(AddToCartDto cartAdd, Product product, User user){
+		/*List<Cart> userCart = cartRepo.findAllByUserEmail(user.getEmail());
+		if (userCart.isEmpty()) {
+			User newCustomer = new User();
+			newCustomer.setEmail(user.getEmail());
+			newCustomer.setFirstName(user.getFirstName());
+			newCustomer.setLastName(user.getLastName());
+			userServ.save(newCustomer);
+		}
+		*/
+		
 		cartAdd.setProductId(product.getId());
 		int quantity = cartAdd.getQuantity();
 		int stock = product.getStock();
@@ -40,8 +53,8 @@ public class CartService {
 		}
 	}
 	
-	public CartDto listCartItems(Integer userId){
-		List<Cart> cartList = cartRepo.findAllByUserUserId(userId);
+	public CartDto listCartItems(String email){
+		List<Cart> cartList = cartRepo.findAllByUserEmail(email);
 		List<CartItemDto> cartItems = new ArrayList<>();
 		for (Cart c:cartList) {
 			CartItemDto req = getFromCart(c);
@@ -86,11 +99,11 @@ public class CartService {
 		cartRepo.deleteByUserUserId(userId);
 	}
 	
-	public List<Cart> findAllByUserId(Integer userId) {
-		return cartRepo.findAllByUserUserId(userId);
+	public List<Cart> findAllByEmail(String email) {
+		return cartRepo.findAllByUserEmail(email);
 	}
 	
-	public Optional<Cart> findCartByUserAndProductId(Integer userId, Integer prdId){
-		return cartRepo.findCartByUserUserIdAndProductId(userId, prdId);
+	public Optional<Cart> findCartByUserAndProductId(String email, Integer prdId){
+		return cartRepo.findCartByUserEmailAndProductId(email, prdId);
 	}
 }

@@ -63,7 +63,7 @@ public class ProductController {
 	}
 
 	@PostMapping("/add")
-	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('Admin')")
 	public ResponseEntity<Product> registerProduct(@RequestBody ProductRequest prdReq) {
 		try {
 			Product registeredProduct = new Product(prdReq.getName(), prdReq.getDescription(), prdReq.getImage(),
@@ -94,7 +94,7 @@ public class ProductController {
 	}
 
 	@PatchMapping("/update/{id}")
-	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('Admin')")
 	public ResponseEntity<Product> updateProduct(@PathVariable Integer id, @RequestBody ProductRequest prdReq) {
 		try {
 			Product databaseProduct = prdService.findByProductId(id).get();
@@ -144,7 +144,7 @@ public class ProductController {
 	}
 
 	@DeleteMapping("/delete/{id}")
-	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('Admin')")
 	public ResponseEntity<HttpStatus> deleteProductById(@PathVariable Integer id) {
 		try {
 			Product prd = prdService.findByProductId(id)

@@ -2,6 +2,7 @@ package com.capstone.controller;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.capstone.model.Address;
 import com.capstone.model.Order;
 import com.capstone.model.User;
-//added pay-load LoginRequest to get email address
-import com.capstone.payload.LoginRequest;
+import com.capstone.payload.dto.AddressDto;
 import com.capstone.repository.AddressRepository;
 import com.capstone.repository.UserRepository;
+import com.capstone.service.AddressService;
 import com.capstone.service.EmailService;
 import com.capstone.service.OrderService;
 
@@ -38,34 +39,51 @@ public class OrderController {
 	UserRepository userRepo;
 	@Autowired
 	AddressRepository addressRepo;
+	@Autowired
+	AddressService addressServ;
 	
 	
 	// i need to put in a check to make sure the address is associated with the user
 	//added LoginRequest login and Integer orderId objects to get order number confirmation and email sent to the right email address
-	@PostMapping("/add/{userId}/{addressId}")
-	public ResponseEntity<Order> placeOrder(@PathVariable Integer userId, @PathVariable Integer addressId, LoginRequest login){
-		try {
-			Order placedOrder = orderServ.createOrder(userId, addressId);
-			String userEmail = userRepo.getById(userId).getEmail();
-			String userStreet = addressRepo.getById(addressId).getStreet();
-			String userState = addressRepo.getById(addressId).getCity();
-			String userCountry = addressRepo.getById(addressId).getCountry();
-			String userZip = addressRepo.getById(addressId).getZipcode();
+	@PostMapping("/add/{email}")
+	public ResponseEntity<Order> placeOrder(@PathVariable String email, @RequestBody AddressDto address){
+		try {	
+			Optional<Address> databaseAdr = addressRepo.findByStreetAndCityAndState(address.getStreet(), address.getCity(), address.getState());
+			User user = userRepo.findByEmail(email).get();
+			int addressId = 0;
+			if (databaseAdr.isPresent()) {
+				addressId = databaseAdr.get().getId();
+			} else {
+				Address newAdr = addressServ.addAddress(address, user);
+				addressId = newAdr.getId();
+			}
 			
-			//adding email confirmation and order number for confirmation
-			emailService.sendMail(userEmail , "Order placed! Order number: "+ placedOrder.getId(), "Thank you for placing an order with us! Here's your order details: " 
-			+ "\n"  + "Order Status: " + placedOrder.getStatus() + "\n" + "Shipping Address: " + userStreet + ", " + userState + " " + userZip + " " + userCountry +
-			"\n" + "Total Order Price: $" + placedOrder.getTotalPrice());
-			return new ResponseEntity<>(placedOrder, HttpStatus.OK);
+			if (addressId!=0) {
+				Order placedOrder = orderServ.createOrder(email, addressId);
+				//String userEmail = email;
+				String userStreet = addressRepo.findById(addressId).get().getStreet();
+				String userState = addressRepo.findById(addressId).get().getCity();
+				String userCountry = addressRepo.findById(addressId).get().getCountry();
+				String userZip = addressRepo.findById(addressId).get().getZipcode();
+				
+				//adding email confirmation and order number for confirmation
+				emailService.sendMail(email , "Order placed! Order number: "+ placedOrder.getId(), "Thank you for placing an order with us! Here's your order details: " 
+				+ "\n"  + "Order Status: " + placedOrder.getStatus() + "\n" + "Shipping Address: " + userStreet + ", " + userState + " " + userZip + " " + userCountry +
+				"\n" + "Total Order Price: $" + placedOrder.getTotalPrice());
+				return new ResponseEntity<>(placedOrder, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
-	@GetMapping("/all/{userId}")
-	public ResponseEntity<List<Order>> getAllUserOrders(@PathVariable Integer userId){
+	@GetMapping("/all/{email}")
+	public ResponseEntity<List<Order>> getAllUserOrders(@PathVariable String email){
 		try {
-			List<Order> allOrders = orderServ.listOrders(userId);
+			List<Order> allOrders = orderServ.listOrders(email);
 			return new ResponseEntity<>(allOrders, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

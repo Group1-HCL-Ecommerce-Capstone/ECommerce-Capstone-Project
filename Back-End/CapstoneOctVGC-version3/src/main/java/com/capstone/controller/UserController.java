@@ -52,7 +52,7 @@ public class UserController {
 	PasswordEncoder encoder;
 	
 	@GetMapping("/allUsers")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('Admin')")
 	public ResponseEntity<List<User>> listOfAllUsers(){
 		try {
 			List<User> allUsers = usrService.listAllUsers();
@@ -67,7 +67,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/find/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('Admin')")
 	public ResponseEntity<Optional<User>> selectUserById(@PathVariable Integer id){
 		try {
 			Optional<User> foundUser = usrService.getUserById(id);
@@ -81,7 +81,7 @@ public class UserController {
 	//to access
 	//SOLVED
 	@PostMapping("/addUser")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('Admin')")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest register){
 		if (userRepo.existsByEmail(register.getEmail())) {
 			return ResponseEntity
@@ -90,7 +90,7 @@ public class UserController {
 		}
 
 		User user = new User(register.getEmail(), 
-							 encoder.encode(register.getPassword()), 
+							 //encoder.encode(register.getPassword()), 
 							 register.getFirstName(), 
 							 register.getLastName());
 		Set<String> rolesString = register.getRole();
@@ -134,9 +134,11 @@ public class UserController {
 			if(Objects.nonNull(usr.getEmail())) {
 				databaseUser.setEmail(usr.getEmail());
 			}
+			/*
 			if(Objects.nonNull(usr.getPassword())) {
 				databaseUser.setPassword(encoder.encode(usr.getPassword()));
-			}		
+			}
+			*/		
 			if(Objects.nonNull(usr.getFirstName())) {
 				databaseUser.setFirstName(usr.getFirstName());
 			}
@@ -187,7 +189,7 @@ public class UserController {
 	//this is not working for some reason, returning not found although id is in database
 	// SOLVED, i had an extra parenthesis in the url pattern
 	@DeleteMapping("/remove/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('Admin')")
 	public ResponseEntity<HttpStatus> deleteUserById(@PathVariable Integer id){
 		try {
 			User usr = usrService.getUserById(id)

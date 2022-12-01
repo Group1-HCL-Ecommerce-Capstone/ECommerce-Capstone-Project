@@ -43,8 +43,8 @@ public class User {
 	@Email
 	private String email;
 	
-	@NotBlank
-	private String password;
+	//@NotBlank
+	//private String password;
 	private String firstName;
 	private String lastName;
 	
@@ -63,10 +63,16 @@ public class User {
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private List<Address> addresses;
-	
+	/*
 	public User(String email, String password, String firstName, String lastName) {
 		this.email = email;
 		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+	*/
+	public User(String email, String firstName, String lastName) {
+		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}

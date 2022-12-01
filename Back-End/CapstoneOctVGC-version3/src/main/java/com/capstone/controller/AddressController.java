@@ -38,10 +38,10 @@ public class AddressController {
 	@Autowired
 	UserService usrServ;
 	
-	@GetMapping("/all/{userId}")
-	public ResponseEntity<List<Address>> findAddressesByUserId(@PathVariable Integer userId) {
+	@GetMapping("/all/{email}")
+	public ResponseEntity<List<Address>> findAddressesByUserId(@PathVariable String email) {
 		try {
-			List<Address> adrs = adrService.listAllAddressesByUser(userId);
+			List<Address> adrs = adrService.listAllAddressesByUser(email);
 			if (adrs.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			} else {
@@ -52,11 +52,11 @@ public class AddressController {
 		}
 	}
 
-	@PostMapping("/add/{userId}")
-	public ResponseEntity<Address> addAddress(@PathVariable Integer userId, @RequestBody AddressDto adr) {
+	@PostMapping("/add/{email}")
+	public ResponseEntity<Address> addAddress(@PathVariable String email, @RequestBody AddressDto adr) {
 		try {
-			User user = usrServ.getUserById(userId).get();
-			System.out.println(user.getFirstName());
+			User user = usrServ.findUserByEmail(email).get();
+			System.out.println(user.getUserId());
 			Address adrAdded = adrService.addAddress(adr, user);
 			return new ResponseEntity<>(adrAdded, HttpStatus.OK);
 		} catch (Exception e) {

@@ -27,8 +27,8 @@ public class AddressService {
 		return repo.findAll();
 	}
 	
-	public List<Address> listAllAddressesByUser(Integer userId){
-		return repo.findAddressByUserUserId(userId);
+	public List<Address> listAllAddressesByUser(String email){
+		return repo.findAddressByUserEmail(email);
 	}
 	
 	public Address addAddress(AddressDto adr, User user) {

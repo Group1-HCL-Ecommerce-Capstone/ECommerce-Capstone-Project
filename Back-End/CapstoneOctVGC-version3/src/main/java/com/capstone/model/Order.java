@@ -39,6 +39,7 @@ public class Order {
 	private Date dateOrdered;
 	private String status;
 	private double totalPrice;
+	private int totalQuantity;
 	
 	@ManyToOne
 	@JoinColumn(name ="address_id")

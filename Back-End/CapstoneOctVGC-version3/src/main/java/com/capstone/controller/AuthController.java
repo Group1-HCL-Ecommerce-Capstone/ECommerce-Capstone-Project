@@ -37,6 +37,7 @@ import com.capstone.service.UserDetailsImpl;
 @RequestMapping("/auth")
 @CrossOrigin(origins = "http://localhost:4200/")
 public class AuthController {
+	/*
 	@Autowired
 	AuthenticationManager authenticationManager;
 
@@ -123,5 +124,5 @@ public class AuthController {
 		userRepo.save(user);
 		return ResponseEntity.ok(new MessageResponse("Register Success!"));
 }
-
+*/
 }
