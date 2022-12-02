@@ -22,19 +22,19 @@ public class TestController {
 	}
 	
 	@GetMapping("/user")
-	@PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('User') or hasAuthority('Manger') or hasAuthority('Admin')")
 	public String welcomeUser() {
 		return "Hello user";
 	}
 	
 	@GetMapping("/manag")
-	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('Manager') or hasAuthority('Admin')")
 	public String welcomeManager() {
 		return "Hello manager";
 	}
 
 	@GetMapping("/admin")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('Admin')")
 	public String welcomeAdmin() {
 		return "Hello admin";
 	}
