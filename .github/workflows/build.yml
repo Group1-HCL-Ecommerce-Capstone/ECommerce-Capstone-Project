@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'Front-End/**'
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
