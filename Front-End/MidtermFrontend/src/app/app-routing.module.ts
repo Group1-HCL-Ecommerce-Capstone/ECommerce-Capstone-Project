@@ -22,20 +22,20 @@ const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full'},
   { path: 'home', component: HomeComponent},
   { path: 'catalog', component: CatalogComponent },
-  { path: 'profile', component: ProfileComponent, canActivate: [OktaAuthGuard]},
-  { path: 'profile/list', component: AddressCrudComponent, canActivate: [OktaAuthGuard] },
-  { path: 'profile/add', component: AddAddressComponent, canActivate: [OktaAuthGuard] },
-  { path: 'profile/edit', component: EditAddressComponent, canActivate: [OktaAuthGuard] },
+  { path: 'profile', component: ProfileComponent},
+  { path: 'profile/list', component: AddressCrudComponent },
+  { path: 'profile/add', component: AddAddressComponent },
+  { path: 'profile/edit', component: EditAddressComponent },
   { path: 'login', component: LoginComponent},
   { path: 'login/callback', component: OktaCallbackComponent},
   { path: 'okta', component: OktaConfigComponent},
   { path: 'register', component: RegisterComponent},
-  { path: 'manage/users', component: UserCRUDComponent, canActivate: [OktaAuthGuard]},
-  { path: 'manage/users/add', component: AddUserComponent, canActivate: [OktaAuthGuard]},
-  { path: 'manage/users/edit', component: EditUserComponent, canActivate: [OktaAuthGuard]},
-  { path: 'manage/products', component: ProductCRUDComponent, canActivate: [OktaAuthGuard]},
-  { path: 'manage/products/add', component: AddProductComponent, canActivate: [OktaAuthGuard]},
-  { path: 'manage/products/edit', component: EditProductComponent, canActivate: [OktaAuthGuard]},
+  { path: 'manage/users', component: UserCRUDComponent},
+  { path: 'manage/users/add', component: AddUserComponent},
+  { path: 'manage/users/edit', component: EditUserComponent},
+  { path: 'manage/products', component: ProductCRUDComponent},
+  { path: 'manage/products/add', component: AddProductComponent},
+  { path: 'manage/products/edit', component: EditProductComponent},
   { path: '**', component: PageNotFoundComponent},
   
 ];
@@ -45,3 +45,23 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
+/*
+ *
+ *USING AUTH GUARD FOR ADMIN
+ *
+ *{ //these are the admin protected routes
+    path: 'manage/users',
+    component: UserCRUDComponent,
+    canActivate: [ OktaAuthGuard ],
+    canActivateChild: [ OktaAuthGuard],
+    children: [
+      { path: 'manage/users/add', component: AddUserComponent},
+      { path: 'manage/users/edit', component: EditUserComponent},
+      { path: 'manage/products', component: ProductCRUDComponent},
+      { path: 'manage/products/add', component: AddProductComponent},
+      { path: 'manage/products/edit', component: EditProductComponent}
+    ]
+  },
+ *
+ */

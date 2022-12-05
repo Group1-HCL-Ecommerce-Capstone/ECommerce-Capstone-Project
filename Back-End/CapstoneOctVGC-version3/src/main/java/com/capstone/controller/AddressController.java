@@ -23,8 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capstone.model.Address;
 import com.capstone.model.Order;
+import com.capstone.model.Product;
 import com.capstone.model.User;
 import com.capstone.payload.dto.AddressDto;
+import com.capstone.repository.UserRepository;
 import com.capstone.service.AddressService;
 import com.capstone.service.UserService;
 
@@ -37,6 +39,9 @@ public class AddressController {
 	
 	@Autowired
 	UserService usrServ;
+	
+	@Autowired
+	UserRepository userRepo;
 	
 	@GetMapping("/all/{email}")
 	public ResponseEntity<List<Address>> findAddressesByUserId(@PathVariable String email) {
@@ -55,9 +60,19 @@ public class AddressController {
 	@PostMapping("/add/{email}")
 	public ResponseEntity<Address> addAddress(@PathVariable String email, @RequestBody AddressDto adr) {
 		try {
-			User user = usrServ.findUserByEmail(email).get();
-			System.out.println(user.getUserId());
-			Address adrAdded = adrService.addAddress(adr, user);
+			Address adrAdded = null;
+			boolean emailExists = userRepo.existsByEmail(email);
+			if (emailExists) {
+				User user = usrServ.findUserByEmail(email).get();
+				System.out.println(user.getUserId());
+				adrAdded = adrService.addAddress(adr, user);
+			}else {
+				
+				User newCustomer = new User();
+				newCustomer.setEmail(email);
+				usrServ.save(newCustomer);
+				adrAdded = adrService.addAddress(adr, newCustomer);
+			}
 			return new ResponseEntity<>(adrAdded, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

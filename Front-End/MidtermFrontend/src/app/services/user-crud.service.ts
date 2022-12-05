@@ -35,7 +35,7 @@ export class UserCrudService {
   }
 
   public findAll(): Observable<User[]>{
-    return this.http.get<User[]>(this.usersUrl + '/allUsers', this.addHeaders());
+    return this.http.get<User[]>(this.usersUrl + '/allUsers');
   }
 
   public addUser(user: User){

@@ -1,8 +1,13 @@
 <!--<p class="text-center">Welcome {{currentUser.firstName}}</p>-->
-<div class="profile-card">
+<div class="profile-card text-center">
     <div class="shield"></div>
-    <p *ngIf="name$ | async as name">
-        Hello {{name}}!
+    <!-- Display user's name if logged in -->
+    <p *ngIf="isLoggedIn; else notUser">
+        Hello {{name$ | async}}!
     </p>
+    <!-- Generic welcome if not logged in -->
+    <ng-template #notUser>
+        Welcome
+    </ng-template>
 
 </div>

@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { OktaAuthStateService } from '@okta/okta-angular';
+import { AuthState } from '@okta/okta-auth-js';
+import { filter, map, Observable } from 'rxjs';
 import { UserDetails } from '../models/user-details';
 import { LocalService } from './local.service';
 
@@ -8,7 +10,8 @@ import { LocalService } from './local.service';
   providedIn: 'root'
 })
 export class UserDetailsService {
-
+  public email$: Observable<string>;
+  email:string='';
   currentUser: any;
   isAdded: boolean = false;
   isEdited: boolean = false;
@@ -17,14 +20,21 @@ export class UserDetailsService {
   currentAddressId: number = 0;
   private addressUrl: string;
   constructor(private http: HttpClient,
-    private localStore: LocalService) {
+    private localStore: LocalService,
+    private _oktaAuthStateService: OktaAuthStateService) {
     this.addressUrl = 'http://localhost:8181/address';
-    this.currentUser = this.localStore.getData();
+    //this.currentUser = this.localStore.getData();
+    this.email$ = this._oktaAuthStateService.authState$.pipe(
+      filter((authState: AuthState) => !!authState&& !!authState.isAuthenticated),
+      map((authState: AuthState) => authState.idToken?.claims.email ?? '')
+    );
+    this.email$.forEach((x)=>this.email=x);
   }
 
   public addAddress(userDetails: UserDetails) {
     this.isAdded = false;
-    this.http.post<any>(this.addressUrl + '/add/' + this.currentUser.userId, userDetails).subscribe((response) => {
+    console.log(this.email);
+    this.http.post<any>(this.addressUrl + '/add/' +  this.email,userDetails).subscribe((response) => {
       console.log(response);
       this.isAdded = true;
     },
@@ -47,7 +57,7 @@ export class UserDetailsService {
   }
 
   public findCurrentUserAddresses(): Observable<UserDetails[]>{
-    return this.http.get<UserDetails[]>(this.addressUrl+'/all/'+this.currentUser.userId);
+    return this.http.get<UserDetails[]>(this.addressUrl+'/all/'+this.email);
   }
 
   public findAddress(adrId: number){

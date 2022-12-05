@@ -26,7 +26,7 @@ export class AddAddressComponent implements OnInit {
       this.isAdded = this.userDetailsService.isAdded;
       console.log(this.isAdded);
       form.resetForm();
-    },200);
+    },300);
     
   }
 

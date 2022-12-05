@@ -40,6 +40,7 @@ import { AddressCrudComponent } from './components/address-crud/address-crud.com
 //import { OktaConfigComponent } from './config/okta-config/okta-config.component';
 import { OktaAuthModule, OKTA_CONFIG } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
+import { AuthInterceptor } from './services/auth.interceptor';
 
 const oktaAuth = new OktaAuth({
   //client id given by okta
@@ -91,7 +92,13 @@ const oktaAuth = new OktaAuth({
     OktaAuthModule
 
   ],
-  providers: [UserRegService, CartService, CatalogComponent, {provide: OKTA_CONFIG, useValue: { oktaAuth }}],
+  providers: [
+    UserRegService, 
+    CartService, 
+    CatalogComponent, 
+    {provide: OKTA_CONFIG, useValue: { oktaAuth }},
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { 
