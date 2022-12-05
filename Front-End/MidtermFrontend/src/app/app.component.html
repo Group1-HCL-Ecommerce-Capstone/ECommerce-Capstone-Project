@@ -22,17 +22,24 @@
     <mat-icon matBadge="{{cartService.totalItems}}" matBadgeColor="warn">shopping_cart</mat-icon>
   </button>-->
 
-  <ng-container *ngIf="(isAuthenticated$ | async) === false; else signout">
+  <!--<ng-container *ngIf="(isAuthenticated$ | async) === false; else signout">
     <button (click)="signIn()">Okta Sign In</button>
   </ng-container>
   <ng-template #signout>
     <button (click)="signOut()">Okta Sign Out</button>
-  </ng-template>
+  </ng-template>-->
 
-  <!--<button *ngIf="!localStore.isLoggedIn()" mat-button routerLink="/login" routerLinkActive="active"
+  <button *ngIf="!localStore.isLoggedIn()&& (isAuthenticated$ | async) === false" mat-button routerLink="/login" routerLinkActive="active"
     ariaCurrentWhenActive="page">Login</button>
 
-  <button *ngIf="localStore.isLoggedIn()" mat-button routerLink="/home" (click)="logout()">Logout</button>-->
+
+    <ng-container *ngIf="(isAuthenticated$ | async) === true; else localsignout">
+      <button (click)="signOut()">Okta Sign Out</button>
+    </ng-container>
+    <ng-template #localsignout>
+      <button *ngIf="localStore.isLoggedIn()" mat-button routerLink="/home" (click)="logout()">Logout</button>
+    </ng-template>
+  <!--<button *ngIf="localStore.isLoggedIn()" mat-button routerLink="/home" (click)="logout()">Logout</button>-->
 
 </mat-toolbar>
 <div class="contentpane">
