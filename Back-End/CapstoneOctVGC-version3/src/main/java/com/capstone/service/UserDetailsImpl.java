@@ -22,8 +22,8 @@ public class UserDetailsImpl implements UserDetails{
 	private int userId;
 	private String email;
 	
-	//@JsonIgnore
-	//private String password;
+	@JsonIgnore
+	private String password;
 	
 	private String firstName;
 	private String lastName;
@@ -37,7 +37,7 @@ public class UserDetailsImpl implements UserDetails{
 		return new UserDetailsImpl(
 				user.getUserId(),
 				user.getEmail(),
-				//user.getPassword(),
+				user.getPassword(),
 				user.getFirstName(),
 				user.getLastName(),
 				authorities);
@@ -55,6 +55,10 @@ public class UserDetailsImpl implements UserDetails{
 		return email;
 	}
 	
+	@Override
+	public String getPassword() {
+		return password;
+	}
 
 	public String getFirstName() {
 		return firstName;
@@ -100,11 +104,7 @@ public class UserDetailsImpl implements UserDetails{
 		UserDetailsImpl user = (UserDetailsImpl) o;
 		return Objects.equals(userId, user.userId);
 	}
-	@Override
-	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 	
 	
 	

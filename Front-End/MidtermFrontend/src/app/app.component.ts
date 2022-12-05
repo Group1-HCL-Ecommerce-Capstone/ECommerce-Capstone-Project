@@ -22,7 +22,7 @@ export class AppComponent implements OnInit{
   
   currentUser: any;
   itemsToPrint: any;
-  //isAdmin: boolean = this.userRegService.isAdmin;
+  isAdmin: boolean = this.userRegService.isAdmin;
 
   /*
   constructor(public localStore: LocalService,
@@ -42,8 +42,22 @@ export class AppComponent implements OnInit{
 constructor(
   private _router: Router,
   private _oktaStateService: OktaAuthStateService,
-  @Inject(OKTA_AUTH) private _oktaAuth: OktaAuth
-  ){}
+  @Inject(OKTA_AUTH) private _oktaAuth: OktaAuth,
+  public localStore: LocalService,
+    public userRegService: UserRegService,
+    public cartService: CartService,
+    public catComp: CatalogComponent,
+    private router: Router
+  ){
+    this.currentUser = this.localStore.getData();
+    this.itemsToPrint = this.catComp.itemsToPrint;
+    router.events.subscribe((e)=>{
+      this.isAdmin = this.localStore.admin;
+      console.log(e instanceof NavigationEnd);
+      console.log("app component admin check: "+this.isAdmin);
+    });
+
+  }
 
 
   public ngOnInit(): void {
@@ -62,12 +76,12 @@ constructor(
     await this._oktaAuth.signOut();
   }
 
-  /*
+  
   logout() {
     this.localStore.clearData();
     location.reload();
   }
-*/
+
 
 
   somethingElse() {
