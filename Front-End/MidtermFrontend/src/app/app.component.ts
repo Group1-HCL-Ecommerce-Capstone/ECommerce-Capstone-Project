@@ -24,6 +24,9 @@ export class AppComponent implements OnInit{
   itemsToPrint: any;
   isAdmin: boolean = this.userRegService.isAdmin;
 
+  paymentHandler: any = null;
+
+
   /*
   constructor(public localStore: LocalService,
     public userRegService: UserRegService,
@@ -63,8 +66,8 @@ constructor(
   public ngOnInit(): void {
     this.isAuthenticated$ = this._oktaStateService.authState$.pipe(
       filter((s: AuthState)=>!!s),
-      map((s: AuthState) => s.isAuthenticated ?? false)
-    );
+      map((s: AuthState) => s.isAuthenticated ?? false)),
+      this.invokeStripe();
   }
 
   public async signIn() : Promise<void>{
@@ -86,6 +89,41 @@ constructor(
 
   somethingElse() {
    console.log('Do Stuff');
+  }
+  
+  makePayment(amount: any) {
+    const paymentHandler = (<any>window).StripeCheckout.configure({
+      key: 'pk_test_51M9UYGAywS1S1N1AIpCijfjSSVmJsOkg17aXqpBJKwIY51I4lJfrkUkLA3KuIeMUjWv0Za8usbNQCq66rpMO3rES00RrhgPzTg',
+      locale: 'auto',
+      token: function (stripeToken: any) {
+        console.log(stripeToken);
+        alert('Stripe token generated!');
+      },
+    });
+    paymentHandler.open({
+      name: 'Positronx',
+      description: '3 widgets',
+      amount: amount * 100,
+    });
+  }
+  invokeStripe() {
+    if (!window.document.getElementById('stripe-script')) {
+      const script = window.document.createElement('script');
+      script.id = 'stripe-script';
+      script.type = 'text/javascript';
+      script.src = 'https://checkout.stripe.com/checkout.js';
+      script.onload = () => {
+        this.paymentHandler = (<any>window).StripeCheckout.configure({
+          key: 'pk_test_51M9UYGAywS1S1N1AIpCijfjSSVmJsOkg17aXqpBJKwIY51I4lJfrkUkLA3KuIeMUjWv0Za8usbNQCq66rpMO3rES00RrhgPzTg',
+          locale: 'auto',
+          token: function (stripeToken: any) {
+            console.log(stripeToken);
+            alert('Payment has been successfull!');
+          },
+        });
+      };
+      window.document.body.appendChild(script);
+    }
   }
 
 
