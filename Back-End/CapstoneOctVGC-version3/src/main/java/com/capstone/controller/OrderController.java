@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capstone.model.Address;
 import com.capstone.model.Order;
+import com.capstone.model.Product;
 import com.capstone.model.User;
 import com.capstone.payload.dto.AddressDto;
 import com.capstone.repository.AddressRepository;
@@ -28,6 +30,7 @@ import com.capstone.service.OrderService;
 
 @RestController
 @RequestMapping("/orders")
+@CrossOrigin(origins = "http://localhost:4200/")
 public class OrderController {
 	@Autowired
 	OrderService orderServ;
@@ -41,6 +44,20 @@ public class OrderController {
 	AddressRepository addressRepo;
 	@Autowired
 	AddressService addressServ;
+	
+	@GetMapping("/all")
+	public ResponseEntity<List<Order>> allOrders(){
+		try {
+			List<Order> allOrders = orderServ.listAllOrders();
+			if (allOrders.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			} else {
+				return new ResponseEntity<>(allOrders, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 	
 	
 	// i need to put in a check to make sure the address is associated with the user

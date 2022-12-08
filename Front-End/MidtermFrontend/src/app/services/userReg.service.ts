@@ -42,7 +42,7 @@ export class UserRegService {
       setTimeout(() => {
         this.router.navigate(['home']);
         console.log(this.currentUser.roles);
-      }, 200);
+      }, 400);
 
     },
       error => {

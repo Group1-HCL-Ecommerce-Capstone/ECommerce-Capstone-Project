@@ -43,7 +43,7 @@ public class User {
 	@Email
 	private String email;
 	
-	@NotBlank
+	//@NotBlank
 	private String password;
 	private String firstName;
 	private String lastName;
@@ -71,11 +71,11 @@ public class User {
 		this.lastName = lastName;
 	}
 	
-	public User(String email, String firstName, String lastName) {
+	/*public User(String email, String firstName, String lastName) {
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
-	}
+	}*/
 	
 	
 }

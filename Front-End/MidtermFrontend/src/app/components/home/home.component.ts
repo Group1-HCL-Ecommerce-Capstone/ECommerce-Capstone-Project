@@ -19,33 +19,29 @@ export class HomeComponent implements OnInit {
 
   user: any;
   public name$!: Observable<string>;
-  isLoggedIn!: boolean;
+  isLoggedInOkta!: boolean;
+  isLoggedInDB!: boolean;
 
   constructor(
     private _oktaAuthStateService: OktaAuthStateService,
-    @Inject(OKTA_AUTH) private _auth: OktaAuth,
-    private appComp: AppComponent) {
-    appComp.isAuthenticated$.forEach((x) => this.isLoggedIn = x)
+    private appComp: AppComponent,
+    private localstore: LocalService) {
+    this.appComp.isAuthenticated$.forEach((x) => this.isLoggedInOkta = x);
+    this.isLoggedInDB = this.localstore.isLoggedIn()
+    this.user = this.localstore.getData();
   }
 
   async ngOnInit() {
-    console.log("logged in: " + this.isLoggedIn);
-    this.name$ = this._oktaAuthStateService.authState$.pipe(
-      filter((authState: AuthState) => !!authState && !!authState.isAuthenticated),
-      map((authState: AuthState) => authState.idToken?.claims.name ?? '')
-    );
-    const testG = this._oktaAuthStateService.authState$.pipe(
-      filter((authState: AuthState) => !!authState && !!authState.isAuthenticated),
-      map((authState: AuthState) => authState.idToken?.claims.groups ?? '')
-    );
-
-    testG.forEach((x) => console.log(x));
-    //console.log("BREAK");
-    //const userClaims = await this._auth.getUser();
-    //console.log(userClaims.groups);
-    //console.log(userClaims.groups.toString().search("User"));
-    //console.log(userClaims.groups.toString().search("Admin"));
+    if (this.isLoggedInOkta){
+      this.name$ = this._oktaAuthStateService.authState$.pipe(
+        filter((authState: AuthState) => !!authState && !!authState.isAuthenticated),
+        map((authState: AuthState) => authState.idToken?.claims.name ?? '')
+      );
+    } else if(this.isLoggedInDB){
+      this.name$ = this.user.firstName;
+    }
   }
+}
   /*
   currentUser:any;
   
@@ -56,4 +52,4 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 */
-}
+

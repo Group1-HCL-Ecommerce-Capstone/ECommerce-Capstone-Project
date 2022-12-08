@@ -129,7 +129,7 @@ public class CartController {
 			}
 			return new ResponseEntity<>(item, HttpStatus.OK);
 		} catch (Exception e) {
-			System.out.println(e.getStackTrace());
+			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}

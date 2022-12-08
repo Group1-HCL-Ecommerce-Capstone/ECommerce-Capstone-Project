@@ -4,7 +4,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class LocalService {
-
+  currentUser: any;
+  roles!: string;
   admin:boolean = false;
   constructor() {}
 
@@ -34,6 +35,13 @@ export class LocalService {
       }
     }
     isAdmin(){
+      if (this.isLoggedIn()){
+      this.currentUser = this.getData();
+      this.roles = JSON.stringify(this.currentUser.roles);
+      if(this.roles.indexOf('ROLE_ADMIN')> -1){
+        this.admin =true;
+      }
+    }
       return this.admin;
     }
 }

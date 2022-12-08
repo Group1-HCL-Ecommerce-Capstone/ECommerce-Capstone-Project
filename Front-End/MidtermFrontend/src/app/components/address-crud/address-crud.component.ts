@@ -21,7 +21,7 @@ export class AddressCrudComponent implements OnInit {
     private router: Router,
     private localStore: LocalService
   ) { 
-    this.currentUser = localStore.getData()
+    this.currentUser = this.localStore.getData()
   }
 
   ngOnInit(): void {

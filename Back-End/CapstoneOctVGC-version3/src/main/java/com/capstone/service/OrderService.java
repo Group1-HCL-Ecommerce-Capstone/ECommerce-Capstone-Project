@@ -94,6 +94,10 @@ public class OrderService {
 	public List<Order> listOrders(String email){
 		return orderRepo.findAllByUserEmailOrderByDateOrderedDesc(email);
 	}
+
+	public List<Order> listAllOrders(){
+		return orderRepo.findAll();
+	}
 	
 	public Order findOrder(Integer orderId) throws IllegalArgumentException {
 		Optional<Order> order = orderRepo.findById(orderId);

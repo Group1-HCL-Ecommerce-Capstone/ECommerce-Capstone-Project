@@ -23,26 +23,13 @@ export class ProductService {
     this.productsUrl = 'http://localhost:8181/products';
     this.currentUser = localStorage.getData();
   }
-  
-  public addHeaders(){
-    console.log(this.currentUser);
-    let jwt = this.currentUser.token;
-    console.log(jwt);
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`
-      })
-    }
-    return httpOptions;
-  }
 
   public findAll(): Observable<any[]>{
     return this.http.get<any[]>(this.productsUrl + '/all');
   }
 
   public addProduct(product: Product){
-    this.http.post<any>(this.productsUrl + "/add", product, this.addHeaders()).subscribe((response) => {
+    this.http.post<any>(this.productsUrl + "/add", product).subscribe((response) => {
       console.log(response);
       this.isAdded = true;
     },
@@ -53,7 +40,7 @@ export class ProductService {
   }
 
   public editProduct(prdId: number, product: Product){
-    this.http.patch<any>(this.productsUrl+'/update/'+prdId, product, this.addHeaders()).subscribe((response) => {
+    this.http.patch<any>(this.productsUrl+'/update/'+prdId, product).subscribe((response) => {
       console.log(response);
       this.isEdited = true;
     },
@@ -68,7 +55,7 @@ export class ProductService {
   }
 
   public deleteProduct(id: number){
-    return this.http.delete(this.productsUrl+'/delete/'+id, this.addHeaders());
+    return this.http.delete(this.productsUrl+'/delete/'+id);
   }
 
   public select(prdId: number){

@@ -6,21 +6,30 @@
 
   <span class="example-spacer"></span>
 
-  <!--<button mat-button routerLink="/manage/users" *ngIf="localStore.isAdmin()" routerLinkActive="active"
-    ariaCurrentWhenActive="page">Edit Users</button>
+<button *ngIf="(isAuthenticated$ | async)||localStore.isLoggedIn()" mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger" ><mat-icon>account_circle</mat-icon></button>
+<mat-menu #menu="matMenu" xPosition="before">
+  <button id="text" mat-button routerLink="/manage/users" *ngIf="localStore.isAdmin()" routerLinkActive="active"
+    ariaCurrentWhenActive="page">Manage Users</button><br/>
 
   <button mat-button routerLink="/manage/products" *ngIf="localStore.isAdmin()" routerLinkActive="active"
-    ariaCurrentWhenActive="page">Edit Catalog</button>-->
+    ariaCurrentWhenActive="page">Manage Catalog</button><br/>
+  <button mat-button routerLink="/manage/orders" *ngIf="localStore.isAdmin()" routerLinkActive="active"
+    ariaCurrentWhenActive="page">Manage Orders</button><br/>
 
-  <button mat-button routerLink="/profile" *ngIf="(isAuthenticated$ | async)" routerLinkActive="active"
-    ariaCurrentWhenActive="page">Profile</button>
+  <!--<button mat-button routerLink="/profile" *ngIf="(isAuthenticated$ | async)||localStore.isLoggedIn()" routerLinkActive="active"
+    ariaCurrentWhenActive="page">Profile</button>-->
   
-  <button mat-button routerLink="/profile/list" *ngIf="(isAuthenticated$ | async)" routerLinkActive="active"
-    ariaCurrentWhenActive="page">Addresses</button>
+  <button mat-button routerLink="/profile/list" *ngIf="(isAuthenticated$ | async)||localStore.isLoggedIn()" routerLinkActive="active"
+    ariaCurrentWhenActive="page">Addresses</button><br/>
+  <button mat-button routerLink="/orders" *ngIf="(isAuthenticated$ | async)||localStore.isLoggedIn()" routerLinkActive="active"
+    ariaCurrentWhenActive="page">Orders</button><br/>
 
-  <!--<button mat-icon-button *ngIf="localStore.isLoggedIn()" (click)="somethingElse()">
+  </mat-menu>  
+
+  <button mat-icon-button *ngIf="localStore.isLoggedIn()||(isAuthenticated$ | async)" routerLink="/cart">
     <mat-icon matBadge="{{cartService.totalItems}}" matBadgeColor="warn">shopping_cart</mat-icon>
-  </button>-->
+  </button>
+
 
   <!--<ng-container *ngIf="(isAuthenticated$ | async) === false; else signout">
     <button (click)="signIn()">Okta Sign In</button>
@@ -34,7 +43,7 @@
 
 
     <ng-container *ngIf="(isAuthenticated$ | async) === true; else localsignout">
-      <button (click)="signOut()">Okta Sign Out</button>
+      <button mat-button (click)="signOut()">Sign Out</button>
     </ng-container>
     <ng-template #localsignout>
       <button *ngIf="localStore.isLoggedIn()" mat-button routerLink="/home" (click)="logout()">Logout</button>
@@ -47,5 +56,5 @@
 
   </router-outlet>
 </div>
-
+<!--<app-cart-sidenav></app-cart-sidenav>-->
 </html>

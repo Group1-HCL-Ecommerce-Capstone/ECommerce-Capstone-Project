@@ -1,33 +1,81 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
-import { OKTA_AUTH } from "@okta/okta-angular";
-import OktaAuth from "@okta/okta-auth-js";
-import { Observable } from "rxjs";
+import { OktaAuthStateService, OKTA_AUTH } from "@okta/okta-angular";
+import OktaAuth, { AuthState } from "@okta/okta-auth-js";
+import { filter, map, Observable } from "rxjs";
+import { LocalService } from "./local.service";
 
 @Injectable()
-export class AuthInterceptor implements HttpInterceptor{
+export class AuthInterceptor implements HttpInterceptor {
 
-    constructor(@Inject(OKTA_AUTH) private _oktaAuth: OktaAuth){}
+    currentUser: any;
+    public isAuthenticated$!: Observable<boolean>;
+
+    constructor(private localStore: LocalService,
+        private _oktaStateService: OktaAuthStateService,
+        @Inject(OKTA_AUTH) private _oktaAuth: OktaAuth,
+    ) {
+        this.currentUser = this.localStore.getData();
+        this.isAuthenticated$ = this._oktaStateService.authState$.pipe(
+            filter((s: AuthState)=>!!s),
+            map((s: AuthState) => s.isAuthenticated ?? false)
+          );
+    }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return this.handleAccess(req, next);
+    }
+
+    private handleAccess(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        if (this.isAuthenticated$){
+            return next.handle(req);
+        }else {
+            const allowedOrigins = ['http://localhost'];
+        if (allowedOrigins.some(url => req.urlWithParams.includes(url))) {
+        }
+
+        let jwt = this.currentUser.token;
+        console.log(jwt);
+        req = req.clone({
+            setHeaders: {
+                //'Content-Type': 'application/json',
+                Authorization: `Bearer ${jwt}`
+            }
+            //headers: req.headers.append('Access-Control-Allow-Origin', 'http://localhost:8181/')
+        });
+        return next.handle(req);
+        }
         
     }
 
-    private handleAccess(req: HttpRequest<any>, next: HttpHandler):Observable<HttpEvent<any>>{
-        const allowedOrigins = ['http://localhost'];
-        if (allowedOrigins.some(url => req.urlWithParams.includes(url))){
-            const accessToken = this._oktaAuth.getAccessToken();
-            //console.log(accessToken);
-            req = req.clone({
-                setHeaders: {
-                    Authorization: 'Bearer '+accessToken
-                }
-                //headers: req.headers.append('Access-Control-Allow-Origin', 'http://localhost:8181/')
-            });
-        }
-        
-        return next.handle(req);
-    }
+
+}
+
+
+
+
+
+/*This is for sending Okta tokens
+constructor(@Inject(OKTA_AUTH) private _oktaAuth: OktaAuth){}
+
+intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return this.handleAccess(req, next);
     
 }
+
+private handleAccess(req: HttpRequest<any>, next: HttpHandler):Observable<HttpEvent<any>>{
+    const allowedOrigins = ['http://localhost'];
+    if (allowedOrigins.some(url => req.urlWithParams.includes(url))){
+        const accessToken = this._oktaAuth.getAccessToken();
+        //console.log(accessToken);
+        req = req.clone({
+            setHeaders: {
+                Authorization: 'Bearer '+accessToken
+            }
+            //headers: req.headers.append('Access-Control-Allow-Origin', 'http://localhost:8181/')
+        });
+    }
+    
+    return next.handle(req);
+}
+*/

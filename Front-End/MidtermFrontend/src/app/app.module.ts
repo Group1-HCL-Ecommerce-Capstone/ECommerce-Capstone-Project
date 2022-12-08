@@ -20,6 +20,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { HomeComponent } from './components/home/home.component';
 import { CatalogComponent } from './components/catalog/catalog.component';
@@ -41,6 +43,14 @@ import { AddressCrudComponent } from './components/address-crud/address-crud.com
 import { OktaAuthModule, OKTA_CONFIG } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
 import { AuthInterceptor } from './services/auth.interceptor';
+import { CartSidenavComponent } from './components/cart-sidenav/cart-sidenav.component';
+import { SidenavService } from './services/sidenav.service';
+import { CartComponent } from './components/cart/cart.component';
+import { OrdersComponent } from './components/orders/orders.component';
+import { OrdersCrudComponent } from './components/orders-crud/orders-crud.component';
+import { OrdersEditStatusComponent } from './components/orders-edit-status/orders-edit-status.component';
+import { MatSelectModule } from '@angular/material/select';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 const oktaAuth = new OktaAuth({
   //client id given by okta
@@ -67,7 +77,13 @@ const oktaAuth = new OktaAuth({
     EditProductComponent,
     AddAddressComponent,
     EditAddressComponent,
-    AddressCrudComponent
+    AddressCrudComponent,
+    CartSidenavComponent,
+    CartComponent,
+    OrdersComponent,
+    OrdersCrudComponent,
+    OrdersEditStatusComponent,
+    CheckoutComponent
   ],
   imports: [
     BrowserModule,
@@ -89,13 +105,16 @@ const oktaAuth = new OktaAuth({
     FormsModule,
     ReactiveFormsModule,
     MatCheckboxModule,
-    OktaAuthModule
-
-  ],
+    OktaAuthModule,
+    MatExpansionModule,
+    MatMenuModule,
+    MatSelectModule
+    ],
   providers: [
     UserRegService, 
     CartService, 
     CatalogComponent, 
+    SidenavService,
     {provide: OKTA_CONFIG, useValue: { oktaAuth }},
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],

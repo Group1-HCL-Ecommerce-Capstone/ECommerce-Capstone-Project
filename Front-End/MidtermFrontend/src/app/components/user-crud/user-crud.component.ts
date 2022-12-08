@@ -43,9 +43,7 @@ export class UserCRUDComponent implements OnInit {
 
   public deleteUser(id: number, fName: string, lName: string) {
     if(confirm(`Are you sure you want to delete User ${id}: ${fName} ${lName}?`)){
-      this.usersService.deleteUser
-  (id)
-      .subscribe(data => {
+      this.usersService.deleteUser(id).subscribe(data => {
         this.users = this.users.filter(item => item.userId !== id);
         console.log('User deleted successfully!');
       }
