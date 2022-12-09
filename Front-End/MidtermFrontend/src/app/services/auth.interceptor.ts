@@ -10,6 +10,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     currentUser: any;
     public isAuthenticated$!: Observable<boolean>;
+    isLoggedInOkta!: boolean;
 
     constructor(private localStore: LocalService,
         private _oktaStateService: OktaAuthStateService,
@@ -20,6 +21,7 @@ export class AuthInterceptor implements HttpInterceptor {
             filter((s: AuthState)=>!!s),
             map((s: AuthState) => s.isAuthenticated ?? false)
           );
+        this.isAuthenticated$.forEach((x)=>this.isLoggedInOkta = x);
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -27,7 +29,7 @@ export class AuthInterceptor implements HttpInterceptor {
     }
 
     private handleAccess(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (this.isAuthenticated$){
+        if (this.isLoggedInOkta){
             return next.handle(req);
         }else {
             const allowedOrigins = ['http://localhost'];

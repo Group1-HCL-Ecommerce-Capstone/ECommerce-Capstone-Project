@@ -22,26 +22,26 @@ export class UserDetailsService {
   oneAddress: any;
   currentAddressId: number = 0;
   private addressUrl: string;
-  
+
 
   constructor(private http: HttpClient,
     private localStore: LocalService,
     private _oktaAuthStateService: OktaAuthStateService
-    ) {
+  ) {
     this.addressUrl = 'http://localhost:8181/address';
 
     this.isAuthenticated$ = this._oktaAuthStateService.authState$.pipe(
       filter((s: AuthState) => !!s),
       map((s: AuthState) => s.isAuthenticated ?? false)
     );
-    this.isAuthenticated$.forEach((x)=>this.isLoggedInOkta = x);
-    if (this.isLoggedInOkta) {
-      this.email$ = this._oktaAuthStateService.authState$.pipe(
-        filter((authState: AuthState) => !!authState && !!authState.isAuthenticated),
-        map((authState: AuthState) => authState.idToken?.claims.email ?? '')
-      );
-      this.email$.forEach((x) => this.email = x);
-    } else {
+    this.isAuthenticated$.forEach((x) => this.isLoggedInOkta = x);
+
+    this.email$ = this._oktaAuthStateService.authState$.pipe(
+      filter((authState: AuthState) => !!authState && !!authState.isAuthenticated),
+      map((authState: AuthState) => authState.idToken?.claims.email ?? '')
+    );
+    this.email$.forEach((x) => this.email = x);
+    if (this.localStore.isLoggedIn()) {
       this.currentUser = this.localStore.getData();
     }
 
@@ -51,7 +51,7 @@ export class UserDetailsService {
     this.isAdded = false;
     console.log(this.email);
 
-    if(this.isLoggedInOkta){
+    if (this.isLoggedInOkta) {
       this.http.post<any>(this.addressUrl + '/add/' + this.email, userDetails).subscribe((response) => {
         console.log(response);
         this.isAdded = true;
@@ -60,17 +60,17 @@ export class UserDetailsService {
           this.isAdded = false;
           this.errMessage = error.error.message;
         });
-    }else{
+    } else {
       this.http.post<any>(this.addressUrl + '/add/' + this.currentUser.email, userDetails).subscribe((response) => {
-      console.log(response);
-      this.isAdded = true;
-    },
-      error => {
-        this.isAdded = false;
-        this.errMessage = error.error.message;
-      });
+        console.log(response);
+        this.isAdded = true;
+      },
+        error => {
+          this.isAdded = false;
+          this.errMessage = error.error.message;
+        });
     }
-    
+
   }
 
   public updateAddress(adrId: number, userDetails: UserDetails) {
@@ -86,12 +86,12 @@ export class UserDetailsService {
   }
 
   public findCurrentUserAddresses(): Observable<UserDetails[]> {
-    if (this.isLoggedInOkta){
+    if (this.isLoggedInOkta) {
       return this.http.get<UserDetails[]>(this.addressUrl + '/all/' + this.email);
     } else {
       return this.http.get<UserDetails[]>(this.addressUrl + '/all/' + this.currentUser.email);
     }
-    
+
   }
 
   public findAddress(adrId: number) {

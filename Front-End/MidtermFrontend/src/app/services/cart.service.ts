@@ -30,13 +30,12 @@ export class CartService {
       map((s: AuthState) => s.isAuthenticated ?? false)
     );
     this.isAuthenticated$.forEach((x)=>this.isLoggedInOkta = x);
-    if (this.isLoggedInOkta) {
-      this.email$ = this._oktaAuthStateService.authState$.pipe(
+    this.email$ = this._oktaAuthStateService.authState$.pipe(
         filter((authState: AuthState) => !!authState && !!authState.isAuthenticated),
         map((authState: AuthState) => authState.idToken?.claims.email ?? '')
       );
       this.email$.forEach((x) => this.email = x);
-    } else {
+    if (this.localStore.isLoggedIn()){
       this.currentUser = this.localStore.getData();
     }
   }
@@ -44,6 +43,7 @@ export class CartService {
   getCartInfo(): any{
     console.log(this.isLoggedInOkta);
     if (this.isLoggedInOkta){
+      console.log(this.email);
       this.http.get<any>(this.cartUrl + '/list/' + this.email).subscribe((response) => {return this.totalItems = response.totalQuantity});
     }else {
       this.http.get<any>(this.cartUrl + '/list/' + this.currentUser.email).subscribe((response) => {return this.totalItems = response.totalQuantity});
