@@ -4,11 +4,14 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class LocalService {
-
+  currentUser: any;
+  roles!: string;
+  admin:boolean = false;
   constructor() {}
 
     public saveData(value: any){
       localStorage.setItem('storedUser', JSON.stringify(value));
+      this.setAdmin(JSON.stringify(value));
     }
 
     public getData(){
@@ -24,5 +27,21 @@ export class LocalService {
         return true;
       }
       return false;
+    }
+
+    setAdmin(value:string){
+      if(value.indexOf('ROLE_ADMIN')> -1){
+        this.admin =true;
+      }
+    }
+    isAdmin(){
+      if (this.isLoggedIn()){
+      this.currentUser = this.getData();
+      this.roles = JSON.stringify(this.currentUser.roles);
+      if(this.roles.indexOf('ROLE_ADMIN')> -1){
+        this.admin =true;
+      }
+    }
+      return this.admin;
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -62,7 +63,7 @@ public class ProductController {
 	}
 
 	@PostMapping("/add")
-	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('Admin')")
 	public ResponseEntity<Product> registerProduct(@RequestBody ProductRequest prdReq) {
 		try {
 			Product registeredProduct = new Product(prdReq.getName(), prdReq.getDescription(), prdReq.getImage(),
@@ -93,7 +94,7 @@ public class ProductController {
 	}
 
 	@PatchMapping("/update/{id}")
-	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('Admin')")
 	public ResponseEntity<Product> updateProduct(@PathVariable Integer id, @RequestBody ProductRequest prdReq) {
 		try {
 			Product databaseProduct = prdService.findByProductId(id).get();
@@ -143,7 +144,7 @@ public class ProductController {
 	}
 
 	@DeleteMapping("/delete/{id}")
-	@PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+	@PreAuthorize("hasAuthority('Admin')")
 	public ResponseEntity<HttpStatus> deleteProductById(@PathVariable Integer id) {
 		try {
 			Product prd = prdService.findByProductId(id)

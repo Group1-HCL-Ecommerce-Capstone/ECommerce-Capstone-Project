@@ -10,4 +10,5 @@ import com.capstone.model.Order;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer>{
 	List<Order> findAllByUserUserIdOrderByDateOrderedDesc(Integer userId);
+	List<Order> findAllByUserEmailOrderByDateOrderedDesc(String email);
 }

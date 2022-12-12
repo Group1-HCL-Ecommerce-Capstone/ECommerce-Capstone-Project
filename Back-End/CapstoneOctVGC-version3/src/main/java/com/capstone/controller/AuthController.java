@@ -37,6 +37,7 @@ import com.capstone.service.UserDetailsImpl;
 @RequestMapping("/auth")
 @CrossOrigin(origins = "http://localhost:4200/")
 public class AuthController {
+
 	@Autowired
 	AuthenticationManager authenticationManager;
 
@@ -69,6 +70,7 @@ public class AuthController {
 		return ResponseEntity.ok(new JwtResponse(jwt, 
 												 userDetails.getUserId(), 
 												 userDetails.getEmail(),
+												 userDetails.getPassword(),
 												 userDetails.getFirstName(), 
 												 userDetails.getLastName(), 
 												 roles));

@@ -11,7 +11,7 @@ import com.capstone.model.User;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Integer>{
-	List<Cart> findAllByUserUserId(Integer userId);
+	List<Cart> findAllByUserEmail(String email);
 	List<Cart> deleteByUserUserId(Integer userId);
-	Optional<Cart> findCartByUserUserIdAndProductId(Integer userId, Integer prdId);
+	Optional<Cart> findCartByUserEmailAndProductId(String email, Integer prdId);
 }

@@ -1,5 +1,6 @@
 package com.capstone.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -10,11 +11,13 @@ import org.springframework.stereotype.Service;
 import com.capstone.model.Order;
 import com.capstone.model.OrderItem;
 import com.capstone.model.Product;
+import com.capstone.model.User;
 import com.capstone.payload.dto.CartDto;
 import com.capstone.payload.dto.CartItemDto;
 import com.capstone.repository.AddressRepository;
 import com.capstone.repository.OrderItemRepository;
 import com.capstone.repository.OrderRepository;
+import com.capstone.repository.UserRepository;
 
 @Service
 public class OrderService {
@@ -36,10 +39,13 @@ public class OrderService {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	UserRepository userRepo;
+	
 	// this is not working somewhere
 	// SOLVED
-	public Order createOrder(Integer userId, Integer addressId) {
-		CartDto cart = cartService.listCartItems(userId);
+	public Order createOrder(String email, Integer addressId) {
+		CartDto cart = cartService.listCartItems(email);
 		System.out.println(cart.getTotalPrice());
 		List<CartItemDto> cartItems = cart.getCartItems();	
 		System.out.println(cartItems.get(0));
@@ -47,14 +53,15 @@ public class OrderService {
 		Order newOrder = new Order();
 		newOrder.setDateOrdered(new Date());
 		newOrder.setAddress(adrRepo.findById(addressId).get());
-		newOrder.setUser(userService.getUserById(userId).get());
+		newOrder.setUser(userRepo.findByEmail(email).get());
 		newOrder.setStatus("ordered");
 		newOrder.setTotalPrice(cart.getTotalPrice());
-		newOrder.setCarts(cartService.findAllByUserId(userId));
+		newOrder.setTotalQuantity(cart.getTotalQuantity());
+		newOrder.setCarts(cartService.findAllByEmail(email));
 		Order savedOrder = orderRepo.save(newOrder);
 		System.out.println(newOrder.toString());
 		
-		
+		List<OrderItem> orderedItems = new ArrayList<>();
 		for (CartItemDto item: cartItems) {
 			
 			System.out.println(item.getProduct().getId());
@@ -68,14 +75,15 @@ public class OrderService {
 				orderItems.setProductId(item.getProduct().getId());
 				orderItems.setOrder(newOrder);
 				itemRepo.save(orderItems);
+				orderedItems.add(orderItems);
 				System.out.println(orderItems.getProductId());
 			}			
 		}
 		
-		
-		
+		newOrder.setOrderItems(orderedItems);
+		User user = userRepo.findByEmail(email).get();
 		//System.out.println(savedOrder.toString());
-		cartService.deleteUserCartItemsbyId(userId);
+		cartService.deleteUserCartItemsbyId(user.getUserId());
 		return savedOrder;
 	}
 	
@@ -83,8 +91,12 @@ public class OrderService {
 		return orderRepo.save(order);
 	}
 	
-	public List<Order> listOrders(Integer userId){
-		return orderRepo.findAllByUserUserIdOrderByDateOrderedDesc(userId);
+	public List<Order> listOrders(String email){
+		return orderRepo.findAllByUserEmailOrderByDateOrderedDesc(email);
+	}
+
+	public List<Order> listAllOrders(){
+		return orderRepo.findAll();
 	}
 	
 	public Order findOrder(Integer orderId) throws IllegalArgumentException {

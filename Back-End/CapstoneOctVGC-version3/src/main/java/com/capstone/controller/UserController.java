@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -126,16 +127,18 @@ public class UserController {
 		return ResponseEntity.ok(new MessageResponse("Register Success!"));
 	}
 	
-	@PutMapping("/update/{id}")
+	@PatchMapping("/update/{id}")
 	public ResponseEntity<User> updateUserDetails(@PathVariable Integer id, @RequestBody RegisterRequest usr){
 		try {
 			User databaseUser = usrService.getUserById(id).get();
 			if(Objects.nonNull(usr.getEmail())) {
 				databaseUser.setEmail(usr.getEmail());
 			}
+			/*
 			if(Objects.nonNull(usr.getPassword())) {
 				databaseUser.setPassword(encoder.encode(usr.getPassword()));
-			}		
+			}
+			*/		
 			if(Objects.nonNull(usr.getFirstName())) {
 				databaseUser.setFirstName(usr.getFirstName());
 			}
@@ -145,6 +148,7 @@ public class UserController {
 			//this is not doing what i want, non null will take the roles available and change it
 			//to what i input, so if i dont input anything the roles are removed
 			//SOLVED
+			System.out.println(usr.getRole());
 			if(Objects.nonNull((usr.getRole()))){
 				Set<String> rolesString = usr.getRole();
 				Set<Role> roles = new HashSet<>();

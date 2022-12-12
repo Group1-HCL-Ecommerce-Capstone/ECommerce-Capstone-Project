@@ -1,5 +1,5 @@
 export class UserDetails {
-    addressId: number = 0
+    id: number = 0
     street: string = ""
     city: string = ""
     state: string = ""
