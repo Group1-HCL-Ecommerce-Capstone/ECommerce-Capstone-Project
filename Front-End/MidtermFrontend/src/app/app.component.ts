@@ -88,7 +88,7 @@ constructor(
   
   logout() {
     this.localStore.clearData();
-    location.reload();
+    //location.reload();
   }
 
   toggleSidenav(){
